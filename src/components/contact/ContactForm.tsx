@@ -74,7 +74,7 @@ function Field({
           )}
           {required && <span className="sr-only"> ({requiredLabel})</span>}
         </span>
-        {!required && <span className="label-mono text-[0.62rem] text-faint">{optionalLabel}</span>}
+        {!required && <span className="caption text-faint">{optionalLabel}</span>}
       </label>
       {children}
       {hint && !error && (
@@ -334,7 +334,7 @@ export function ContactForm({
       <fieldset className="flex flex-col gap-2">
         <legend className="mb-2 flex w-full items-baseline justify-between text-sm font-medium">
           {t.fields.hasWebsite}
-          <span className="label-mono text-[0.62rem] text-faint">{t.optional}</span>
+          <span className="caption text-faint">{t.optional}</span>
         </legend>
         <div className="grid grid-cols-2 gap-2">
           {(['yes', 'no'] as const).map((v) => (

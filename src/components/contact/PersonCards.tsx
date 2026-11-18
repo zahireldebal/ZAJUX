@@ -10,13 +10,13 @@ export function PersonCards({ locale, t, common }: { locale: Locale; t: Dictiona
   const order: PersonId[] = locale === 'es' ? ['juani', 'zahir'] : ['zahir', 'juani'];
   return (
     <div>
-      <p className="label-mono text-[0.68rem] text-faint">{t.direct}</p>
+      <p className="caption text-faint">{t.direct}</p>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2">
         {order.map((id) => {
           const p = PEOPLE[id];
           const first = p.name.split(' ')[0]!;
           return (
-            <li key={id} className="card card-hover flex items-center justify-between gap-4 p-4 sm:p-5">
+            <li key={id} className="tile tile-hover flex items-center justify-between gap-4 p-4 sm:p-5">
               <div className="flex items-center gap-3">
                 <Flag code={p.countryCode} label={common.flags[p.countryCode]} className="h-5 w-7" />
                 <div>

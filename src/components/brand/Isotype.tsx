@@ -12,7 +12,7 @@ export function Isotype({ boxed = true, className = 'size-9', chevrons = true }:
         </g>
       )}
       {MARK.bars.map((b) => (
-        <rect key={b.y} x={b.x} y={b.y} width={b.w} height={b.h} fill="#F5F4F0" />
+        <rect key={b.y} x={b.x} y={b.y} width={b.w} height={b.h} fill="#F5F5F7" />
       ))}
       <line x1={d.x1} y1={d.y1} x2={d.x2} y2={d.y2} stroke="#C6F432" strokeWidth={d.w} />
     </>
@@ -26,7 +26,7 @@ export function Isotype({ boxed = true, className = 'size-9', chevrons = true }:
   }
   return (
     <svg viewBox="0 0 173 173" className={className} aria-hidden="true" focusable="false">
-      <rect width="173" height="173" rx="38" fill="#1C2029" />
+      <rect width="173" height="173" rx="38" fill="#161617" />
       <g transform="translate(86.5 86.5)">{inner}</g>
     </svg>
   );

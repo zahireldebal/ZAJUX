@@ -32,7 +32,7 @@ export default function RootPage() {
         <Isotype className="size-12" />
         <Wordmark className="h-6" idPrefix="root" />
       </span>
-      <h1 className="label-mono text-mute">{en.root.choose}</h1>
+      <h1 className="caption text-mute">{en.root.choose}</h1>
       <ul className="flex flex-wrap justify-center gap-3">
         {LOCALES.map((l) => (
           <li key={l}>

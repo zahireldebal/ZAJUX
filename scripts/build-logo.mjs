@@ -28,10 +28,10 @@ const monoReg = font('Space-Mono-wght-400.ttf');
 const grotesk = font('Space-Grotesk-wght-600.ttf');
 
 const C = {
-  bg: '#0F1115',
-  surface: '#1C2029',
-  white: '#F5F4F0',
-  gray: '#A7ABB5',
+  bg: '#000000',
+  surface: '#161617',
+  white: '#F5F5F7',
+  gray: '#A1A1A6',
   chevron: '#6B7280',
   lime: '#C6F432',
 };

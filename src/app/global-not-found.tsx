@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { grotesk, mono } from './fonts';
+import { inter } from './fonts';
 import { Isotype } from '@/components/brand/Isotype';
 import { Wordmark } from '@/components/brand/Wordmark';
 import { LOCALES, HREFLANG, homePath } from '@/i18n/config';
@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: '404 · ZAJUX', robots: { index: fals
 /** 404 para cualquier ruta inexistente: no sabemos el idioma, así que se muestra en los tres. */
 export default function GlobalNotFound() {
   return (
-    <html lang="es" className={`${grotesk.variable} ${mono.variable}`}>
+    <html lang="es" className={inter.variable}>
       <body>
         <main className="container-x flex min-h-dvh flex-col justify-center py-24">
           {/* Navegación completa a propósito: la raíz corre la detección de idioma */}
@@ -20,7 +20,7 @@ export default function GlobalNotFound() {
             <Isotype className="size-10" />
             <Wordmark className="h-5" idPrefix="nf" />
           </a>
-          <p className="label-mono mt-16 text-lime">&lt;/&gt; 404</p>
+          <p className="caption mt-16 text-lime">&lt;/&gt; 404</p>
           <ul className="mt-6 grid gap-10 md:grid-cols-3">
             {LOCALES.map((l) => {
               const t = getDictionary(l).notFound;
