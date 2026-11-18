@@ -81,9 +81,9 @@ for (const c of cases) {
 
 test('email sin clave de Web3Forms cae a mailto: y borra el borrador', async ({ page }) => {
   await setup(page);
-  await gotoReady(page, '/es/');
+  await gotoReady(page, '/es/#contacto');
   const form = page.locator('section form').last();
-  await form.scrollIntoViewIfNeeded();
+  await expect(form).toBeVisible();
   await form.locator('input[name="name"]').fill('Ana');
   await form.locator('select[name="country"]').selectOption('br');
   await form.locator('select[name="service"]').selectOption('unsure');
@@ -100,7 +100,7 @@ test('email sin clave de Web3Forms cae a mailto: y borra el borrador', async ({ 
 
 test('email sin dirección pide el email', async ({ page }) => {
   await setup(page);
-  await gotoReady(page, '/es/');
+  await gotoReady(page, '/es/#contacto');
   const form = page.locator('section form').last();
   await form.locator('input[name="name"]').fill('Ana');
   await form.locator('select[name="country"]').selectOption('uy');
@@ -115,7 +115,7 @@ test('email sin dirección pide el email', async ({ page }) => {
 
 test('tarjetas directas: WhatsApp de Juani y de Zahir sin mostrar números', async ({ page }) => {
   await setup(page);
-  await gotoReady(page, '/es/');
+  await gotoReady(page, '/es/#contacto');
   const juani = page.getByRole('link', { name: 'WhatsApp de Juani' });
   const zahir = page.getByRole('link', { name: 'WhatsApp de Zahir' });
   await expect(juani).toHaveAttribute('href', /^https:\/\/wa\.me\/59892754708\?text=/);

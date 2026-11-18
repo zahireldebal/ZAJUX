@@ -1,6 +1,8 @@
 'use client';
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import type { ContactDict } from '@/lib/contact';
+import type { Locale } from '@/i18n/config';
 
 export type PlanId = 'brand' | 'booking' | 'custom' | 'maintenance';
 
@@ -10,11 +12,14 @@ interface ContactCtx {
   closeContact: () => void;
   isOpen: boolean;
   plan: PlanId | undefined;
+  /** Textos del formulario (se envían una sola vez para toda la página). */
+  dict: ContactDict;
+  locale: Locale;
 }
 
 const Ctx = createContext<ContactCtx | null>(null);
 
-export function ContactProvider({ children }: { children: ReactNode }) {
+export function ContactProvider({ children, dict, locale }: { children: ReactNode; dict: ContactDict; locale: Locale }) {
   const [isOpen, setOpen] = useState(false);
   const [plan, setPlan] = useState<PlanId | undefined>(undefined);
 
@@ -24,7 +29,10 @@ export function ContactProvider({ children }: { children: ReactNode }) {
   }, []);
   const closeContact = useCallback(() => setOpen(false), []);
 
-  const value = useMemo(() => ({ openContact, closeContact, isOpen, plan }), [openContact, closeContact, isOpen, plan]);
+  const value = useMemo(
+    () => ({ openContact, closeContact, isOpen, plan, dict, locale }),
+    [openContact, closeContact, isOpen, plan, dict, locale],
+  );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

@@ -10,7 +10,7 @@ export function PersonCards({ locale, t, common }: { locale: Locale; t: Dictiona
   const order: PersonId[] = locale === 'es' ? ['juani', 'zahir'] : ['zahir', 'juani'];
   return (
     <div>
-      <p className="label-mono text-[0.68rem] text-chevron">{t.direct}</p>
+      <p className="label-mono text-[0.68rem] text-faint">{t.direct}</p>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2">
         {order.map((id) => {
           const p = PEOPLE[id];

@@ -32,7 +32,7 @@ export function Footer({
           </div>
 
           <nav aria-label={t.sections} className="md:col-span-3">
-            <h2 className="label-mono text-chevron">{t.sections}</h2>
+            <h2 className="label-mono text-faint">{t.sections}</h2>
             <ul className="mt-4 grid grid-cols-2 gap-x-6 md:grid-cols-1">
               {[...links, 'contact' as const].map((k) => (
                 <li key={k}>
@@ -46,7 +46,7 @@ export function Footer({
 
           <div className="md:col-span-4">
             <nav aria-label={t.legal}>
-              <h2 className="label-mono text-chevron">{t.legal}</h2>
+              <h2 className="label-mono text-faint">{t.legal}</h2>
               <ul className="mt-4">
                 {LEGAL_KEYS.map((k) => (
                   <li key={k}>
@@ -57,7 +57,7 @@ export function Footer({
                 ))}
               </ul>
             </nav>
-            <h2 className="label-mono mt-8 text-chevron">{t.contact}</h2>
+            <h2 className="label-mono mt-8 text-faint">{t.contact}</h2>
             <ul className="mt-4">
               {hasContactEmail() && (
                 <li>

@@ -48,10 +48,10 @@ export function About({ locale, t, index }: { locale: Locale; t: Dictionary; ind
                       <Flag code={p.countryCode} label={t.common.flags[p.countryCode]} />
                       {p.city}, {t.common.countries[p.countryCode]}
                     </p>
-                    <p className="label-mono mt-3 text-[0.68rem] text-chevron">{a.roles[id]}</p>
+                    <p className="label-mono mt-3 text-[0.68rem] text-faint">{a.roles[id]}</p>
                   </div>
                   <div>
-                    <p className="label-mono text-[0.68rem] text-chevron sm:text-right">{a.languages}</p>
+                    <p className="label-mono text-[0.68rem] text-faint sm:text-right">{a.languages}</p>
                     <ul className="mt-2 flex flex-wrap gap-1.5 sm:justify-end">
                       {p.languages.map((l) => (
                         <li key={l} className="rounded-full border border-line px-3 py-1 text-sm">

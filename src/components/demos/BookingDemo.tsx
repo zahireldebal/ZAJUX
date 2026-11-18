@@ -70,7 +70,7 @@ export function BookingDemo({ t, lang }: { t: T; lang: string }) {
       <div className="relative mt-5 flex-1" aria-live="polite">
         {step === 0 && (
           <div key="s0" className="demo-step">
-            <p className="label-mono text-[0.68rem] text-chevron">{t.pickService}</p>
+            <p className="label-mono text-[0.68rem] text-faint">{t.pickService}</p>
             <ul className="mt-3 grid gap-2">
               {t.services.map((s, i) => (
                 <li key={s.name}>
@@ -94,7 +94,7 @@ export function BookingDemo({ t, lang }: { t: T; lang: string }) {
 
         {step === 1 && (
           <div key="s1" className="demo-step">
-            <p className="label-mono text-[0.68rem] text-chevron">{t.pickDay}</p>
+            <p className="label-mono text-[0.68rem] text-faint">{t.pickDay}</p>
             <ul className="mt-3 grid grid-cols-3 gap-2">
               {days.map((d, i) => (
                 <li key={d.key}>
@@ -121,7 +121,7 @@ export function BookingDemo({ t, lang }: { t: T; lang: string }) {
 
         {step === 2 && day !== null && (
           <div key="s2" className="demo-step">
-            <p className="label-mono text-[0.68rem] text-chevron">
+            <p className="label-mono text-[0.68rem] text-faint">
               {t.pickTime} · <span className="capitalize">{days[day]?.long}</span>
             </p>
             <ul className="mt-3 grid grid-cols-4 gap-2">
@@ -138,7 +138,7 @@ export function BookingDemo({ t, lang }: { t: T; lang: string }) {
                         go(3);
                       }}
                       className={`${chip} w-full justify-center px-0 font-mono ${
-                        off ? 'cursor-not-allowed border-line text-chevron line-through' : 'border-line-strong hover:border-lime/60'
+                        off ? 'cursor-not-allowed border-line text-faint line-through' : 'border-line-strong hover:border-lime/60'
                       }`}
                     >
                       {s}

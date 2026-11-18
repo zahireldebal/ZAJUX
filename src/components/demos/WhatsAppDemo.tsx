@@ -79,14 +79,14 @@ export function WhatsAppDemo({ t }: { t: T }) {
       </label>
 
       <div className="mt-auto rounded-2xl border border-line bg-[#0b141a] p-3">
-        <p className="label-mono text-[0.62rem] text-chevron">{t.preview}</p>
+        <p className="label-mono text-[0.62rem] text-faint">{t.preview}</p>
         <div className="mt-2 flex justify-end">
           <p
             aria-live="polite"
             className="relative max-w-[92%] rounded-xl rounded-tr-sm bg-[#005c4b] px-3 py-2 text-[0.85rem] leading-snug text-[#e9edef]"
           >
             {preview}
-            <span className="mt-1 block text-right text-[0.65rem] text-[#e9edef]/70">
+            <span className="mt-1 block text-right text-[0.65rem] text-[#d5dcdf]">
               12:04 {sent && <span className="text-[#53bdeb]">✓✓</span>}
             </span>
           </p>

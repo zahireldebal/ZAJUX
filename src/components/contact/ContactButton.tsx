@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useContact, type PlanId } from './ContactProvider';
+import { preloadContactForm } from './LazyContactForm';
 
 /**
  * CTA que abre el formulario. Es un enlace a la sección de contacto, así que sin
@@ -26,6 +27,9 @@ export function ContactButton({
       href={href}
       className={className}
       aria-haspopup="dialog"
+      onPointerEnter={() => void preloadContactForm()}
+      onFocus={() => void preloadContactForm()}
+      onTouchStart={() => void preloadContactForm()}
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();

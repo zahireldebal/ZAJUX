@@ -75,13 +75,13 @@ export default async function LegalPage({ params }: Params) {
           <h1 className="mt-5 text-h1 font-semibold">{t.legal.titles[key]}</h1>
           <dl className="label-mono mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[0.7rem] text-mute">
             <div className="flex gap-2">
-              <dt className="text-chevron">{t.legal.updated}</dt>
+              <dt className="text-faint">{t.legal.updated}</dt>
               <dd>
                 <time dateTime={LEGAL_UPDATED}>{updated}</time>
               </dd>
             </div>
             <div className="flex gap-2">
-              <dt className="text-chevron">{t.legal.version}</dt>
+              <dt className="text-faint">{t.legal.version}</dt>
               <dd>v{PRIVACY_POLICY.version}</dd>
             </div>
           </dl>
@@ -91,7 +91,7 @@ export default async function LegalPage({ params }: Params) {
         <div className="mt-14 grid gap-12 border-t border-line pt-12 lg:grid-cols-12 lg:gap-10">
           <nav aria-label={t.legal.toc} className="lg:col-span-4">
             <div className="lg:sticky lg:top-28">
-              <h2 className="label-mono text-[0.68rem] text-chevron">{t.legal.toc}</h2>
+              <h2 className="label-mono text-[0.68rem] text-faint">{t.legal.toc}</h2>
               <ol className="mt-4 space-y-1 border-l border-line">
                 {doc.sections.map((s, i) => (
                   <li key={s.id}>
@@ -99,7 +99,7 @@ export default async function LegalPage({ params }: Params) {
                       href={`#${s.id}`}
                       className="-ml-px flex min-h-10 items-baseline gap-3 border-l border-transparent py-1.5 pl-4 text-sm text-mute transition-colors hover:border-lime hover:text-paper"
                     >
-                      <span className="font-mono text-[0.7rem] text-chevron">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="font-mono text-[0.7rem] text-faint">{String(i + 1).padStart(2, '0')}</span>
                       {s.title}
                     </a>
                   </li>
@@ -120,7 +120,7 @@ export default async function LegalPage({ params }: Params) {
             ))}
 
             <div className="mt-12">
-              <h2 className="label-mono text-[0.68rem] text-chevron">{t.legal.otherPolicies}</h2>
+              <h2 className="label-mono text-[0.68rem] text-faint">{t.legal.otherPolicies}</h2>
               <ul className="mt-4 flex flex-wrap gap-3">
                 {LEGAL_KEYS.filter((k) => k !== key).map((k) => (
                   <li key={k}>

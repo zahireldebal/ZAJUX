@@ -18,7 +18,15 @@ export function FloatingCta({ locale, label }: { locale: Locale; label: string }
     const footer = document.querySelector('footer');
     let pastHero = false;
     let blocked = false;
-    const update = () => setShow(pastHero && !blocked);
+    // Aparece recién cuando la persona empezó a recorrer la página (no por un salto a un ancla)
+    let interacted = false;
+    const update = () => setShow(interacted && pastHero && !blocked);
+    const onInteract = () => {
+      interacted = true;
+      update();
+    };
+    const inputs = ['wheel', 'touchmove', 'keydown'] as const;
+    inputs.forEach((ev) => window.addEventListener(ev, onInteract, { passive: true, once: true }));
 
     const onScroll = () => {
       pastHero = window.scrollY > window.innerHeight * 0.85;
@@ -37,6 +45,7 @@ export function FloatingCta({ locale, label }: { locale: Locale; label: string }
     return () => {
       io.disconnect();
       window.removeEventListener('scroll', onScroll);
+      inputs.forEach((ev) => window.removeEventListener(ev, onInteract));
     };
   }, [locale]);
 
@@ -44,8 +53,8 @@ export function FloatingCta({ locale, label }: { locale: Locale; label: string }
 
   return (
     <div
-      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 transition-[transform,opacity] duration-500 ease-[var(--ease-out-expo)] sm:bottom-6 sm:right-6 ${
-        visibleNow ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-6 opacity-0'
+      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 transition-[transform,opacity,visibility] duration-500 ease-[var(--ease-out-expo)] sm:bottom-6 sm:right-6 ${
+        visibleNow ? 'visible translate-y-0 opacity-100' : 'pointer-events-none invisible translate-y-6 opacity-0'
       }`}
       inert={!visibleNow}
     >

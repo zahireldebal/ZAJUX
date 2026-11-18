@@ -34,7 +34,7 @@ export function Faq({ locale, t, index }: { locale: Locale; t: Dictionary['faq']
                     className="group flex min-h-16 w-full items-center justify-between gap-6 py-5 text-left text-[1.0625rem] font-medium sm:text-lg"
                   >
                     <span className="flex gap-4">
-                      <span className="label-mono mt-1 text-chevron">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="label-mono mt-1 text-faint">{String(i + 1).padStart(2, '0')}</span>
                       <span className={`transition-colors duration-300 ${isOpen ? 'text-paper' : 'text-paper/85 group-hover:text-paper'}`}>
                         {item.q}
                       </span>

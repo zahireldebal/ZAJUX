@@ -11,7 +11,8 @@
   --color-surface-2: #242936;
   --color-paper: #f5f4f0;
   --color-mute: #a7abb5;
-  --color-chevron: #6b7280;
+  --color-chevron: #6b7280; /* solo gráficos (3.8:1) */
+  --color-faint: #8a8f9a; /* texto secundario chico: 5.8:1 sobre ink, 5.0:1 sobre surface */
   --color-lime: #c6f432;
   --color-lime-deep: #a9d61c;
   --color-line: rgb(245 244 240 / 0.1);
@@ -98,10 +99,6 @@
   h2,
   h3 {
     text-wrap: balance;
-  }
-
-  p {
-    text-wrap: pretty;
   }
 
   button,
@@ -347,7 +344,7 @@ html.lenis body {
   --hero-base: 0ms;
 }
 html.intro-pending {
-  --hero-base: 700ms;
+  --hero-base: 180ms;
 }
 
 /* 1. ZAJU: revelado suave por letra (CSS, arranca en la primera pintura) */
@@ -404,9 +401,10 @@ html.js-motion .hero-rise {
     transform: translateY(105%);
   }
 }
+/* Entra desde una opacidad baja (no cero): se ve igual y el texto cuenta como pintado desde el inicio */
 @keyframes zajux-rise {
   from {
-    opacity: 0;
+    opacity: 0.08;
     transform: translateY(18px);
   }
 }
@@ -454,7 +452,11 @@ html.js-motion .hero-ring {
   }
 }
 html.js-motion .hero-ring-spin {
-  animation: zajux-spin 60s linear infinite;
+  animation: zajux-spin 80s linear infinite;
+}
+.hero-ring,
+.hero-ring-spin {
+  will-change: transform;
 }
 @keyframes zajux-spin {
   to {

@@ -50,7 +50,7 @@ export function LangSwitcher({
         {LOCALES.map((l, i) => (
           <li key={l} className="flex items-center">
             {i > 0 && (
-              <span aria-hidden="true" className="px-0.5 text-chevron">
+              <span aria-hidden="true" className="px-0.5 text-faint">
                 ·
               </span>
             )}
@@ -59,7 +59,7 @@ export function LangSwitcher({
               hrefLang={l === 'pt' ? 'pt-BR' : l}
               lang={l === 'pt' ? 'pt-BR' : l}
               aria-current={l === locale ? 'true' : undefined}
-              aria-label={LOCALE_LABEL[l]}
+              aria-label={`${l.toUpperCase()} — ${LOCALE_LABEL[l]}`}
               onClick={(e) => onClick(e, l)}
               className={`label-mono inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-300 ${
                 size === 'lg' ? 'text-sm' : ''

@@ -22,12 +22,12 @@ function OldSite({ t }: { t: T }) {
           <span className="mt-auto border border-black bg-black px-1 text-center font-mono text-[0.55rem] text-[#39ff14]">000123</span>
         </div>
         <div className="flex flex-1 flex-col items-center gap-2 border-2 border-dashed border-[#b03030] p-2 text-center">
-          <div className="flex h-12 w-20 items-center justify-center rounded-sm bg-[#c0c0c0] text-[0.5rem] text-[#555]">[ img ]</div>
+          <div className="flex h-12 w-20 items-center justify-center rounded-sm bg-[#c0c0c0] text-[0.5rem] text-[#2b2b2b]">[ img ]</div>
           <p className="text-[0.62rem] italic leading-tight text-[#b03030] underline">{t.oldText}</p>
           <span className="rounded-full bg-gradient-to-b from-[#ff9c3b] to-[#e0400a] px-3 py-1 text-[0.55rem] font-bold text-white shadow-[2px_2px_0_#000]">
             {t.oldCta}
           </span>
-          <p className="mt-auto text-[0.45rem] text-[#555]">{t.oldFooter}</p>
+          <p className="mt-auto text-[0.45rem] text-[#3a3a3a]">{t.oldFooter}</p>
         </div>
       </div>
     </div>

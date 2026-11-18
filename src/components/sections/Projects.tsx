@@ -30,7 +30,7 @@ export function Projects({ locale, t, index }: { locale: Locale; t: Dictionary; 
                   <div>
                     <h3 className="text-h3 font-medium">{pr.name}</h3>
                     <p className="mt-2 text-mute">{pr.description[locale]}</p>
-                    <p className="label-mono mt-3 text-[0.68rem] text-chevron">
+                    <p className="label-mono mt-3 text-[0.68rem] text-faint">
                       {pr.year} · {pr.tags.join(' · ')}
                     </p>
                   </div>

@@ -28,6 +28,7 @@ test('formulario a WhatsApp: el mensaje se arma mientras se escribe', async ({ p
 });
 
 test('antes/después: se controla con el teclado', async ({ page }) => {
+  await page.getByRole('heading', { name: 'Antes y después' }).scrollIntoViewIfNeeded();
   const slider = page.getByRole('slider', { name: 'Deslizá para comparar el antes y el después' });
   await slider.focus();
   await expect(slider).toHaveAttribute('aria-valuenow', '50');

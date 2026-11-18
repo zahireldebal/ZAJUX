@@ -3,9 +3,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ContactButton } from '@/components/contact/ContactButton';
 import type { PlanId } from '@/components/contact/ContactProvider';
 import { Arrow } from '@/components/ui/Arrow';
-import { BookingDemo } from '@/components/demos/BookingDemo';
-import { WhatsAppDemo } from '@/components/demos/WhatsAppDemo';
-import { BeforeAfterDemo } from '@/components/demos/BeforeAfterDemo';
+import { LazyDemo } from '@/components/demos/LazyDemo';
 import { HREFLANG, SECTION_IDS, sectionHref, type Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n';
 
@@ -34,7 +32,7 @@ function DemoCard({
     <li data-reveal-item className="card flex flex-col overflow-hidden">
       <div className="flex items-start justify-between gap-4 p-5 pb-0 sm:p-6 sm:pb-0">
         <div>
-          <p className="label-mono text-[0.68rem] text-chevron">{`0${n} /`}</p>
+          <p className="label-mono text-[0.68rem] text-faint">{`0${n} /`}</p>
           <h3 className="mt-2 text-h3 font-medium">{title}</h3>
           <p className="mt-1.5 text-sm text-mute">{desc}</p>
         </div>
@@ -62,13 +60,13 @@ export function Demos({ locale, t, index }: { locale: Locale; t: Dictionary; ind
         <SectionHeading index={index} eyebrow={d.eyebrow} title={d.title} intro={d.intro} id="demos-title" />
         <ul className="mt-14 grid gap-4 lg:mt-20 lg:grid-cols-2 xl:grid-cols-3" data-reveal-group>
           <DemoCard n={1} title={d.booking.title} desc={d.booking.desc} plan="booking" {...common}>
-            <BookingDemo t={d.booking} lang={HREFLANG[locale]} />
+            <LazyDemo kind="booking" t={d.booking} lang={HREFLANG[locale]} />
           </DemoCard>
           <DemoCard n={2} title={d.whatsapp.title} desc={d.whatsapp.desc} {...common}>
-            <WhatsAppDemo t={d.whatsapp} />
+            <LazyDemo kind="whatsapp" t={d.whatsapp} />
           </DemoCard>
           <DemoCard n={3} title={d.beforeAfter.title} desc={d.beforeAfter.desc} plan="brand" {...common}>
-            <BeforeAfterDemo t={d.beforeAfter} />
+            <LazyDemo kind="beforeAfter" t={d.beforeAfter} />
           </DemoCard>
         </ul>
       </div>

@@ -15,23 +15,16 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         <div className="hero-grid absolute inset-0" />
         <div className="hero-glow absolute left-1/2 top-[18%] h-[60vmax] w-[60vmax] -translate-x-1/2 rounded-full" />
-        <svg
-          className="absolute left-1/2 top-[30%] h-[46vmax] w-[110vmax] max-w-none -translate-x-1/2 -translate-y-1/2 lg:top-[33%]"
-          viewBox="-550 -230 1100 460"
-          fill="none"
-        >
-          <g className="hero-ring" style={d(150)}>
-            <g className="hero-ring-spin" style={{ transformOrigin: 'center', transformBox: 'fill-box' }}>
-              <ellipse rx="520" ry="200" transform="rotate(-8)" stroke="rgb(245 244 240 / 0.07)" />
-            </g>
-          </g>
-          <g className="hero-ring" style={d(300)}>
-            <ellipse rx="380" ry="138" transform="rotate(-8)" stroke="rgb(198 244 50 / 0.16)" strokeDasharray="2 10" />
-          </g>
-          <g className="hero-ring" style={d(450)}>
-            <ellipse rx="250" ry="88" transform="rotate(-8)" stroke="rgb(245 244 240 / 0.06)" />
-          </g>
-        </svg>
+        {/* Anillos de órbita: cada uno es su propia capa (se animan sin repintar) */}
+          <div className="hero-ring absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 lg:top-[33%]" style={{ ...d(150), width: '104.0vmax', aspectRatio: '1044 / 600' }}>
+            <div className="hero-ring-spin h-full w-full"><svg viewBox="-522 -300 1044 600" className="h-full w-full" fill="none"><ellipse rx="520" ry="200" transform="rotate(-8)" stroke="rgb(245 244 240 / 0.07)" vectorEffect="non-scaling-stroke" /></svg></div>
+          </div>
+          <div className="hero-ring absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 lg:top-[33%]" style={{ ...d(300), width: '76.0vmax', aspectRatio: '764 / 414' }}>
+            <svg viewBox="-382 -207 764 414" className="h-full w-full" fill="none"><ellipse rx="380" ry="138" transform="rotate(-8)" stroke="rgb(198 244 50 / 0.16)" strokeDasharray="2 10" vectorEffect="non-scaling-stroke" /></svg>
+          </div>
+          <div className="hero-ring absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 lg:top-[33%]" style={{ ...d(450), width: '50.0vmax', aspectRatio: '504 / 264' }}>
+            <svg viewBox="-252 -132 504 264" className="h-full w-full" fill="none"><ellipse rx="250" ry="88" transform="rotate(-8)" stroke="rgb(245 244 240 / 0.06)" vectorEffect="non-scaling-stroke" /></svg>
+          </div>
       </div>
 
       <div className="container-x flex flex-1 flex-col items-center justify-center pb-16 pt-28 text-center sm:pt-32">
@@ -53,7 +46,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
           ))}
         </h1>
 
-        <p className="hero-rise mt-6 max-w-[40rem] text-lead text-mute" style={d(380)}>
+        <p className="hero-rise mt-6 max-w-[40rem] text-lead text-mute" style={d(300)}>
           {t.hero.subtitle}
         </p>
 
@@ -72,7 +65,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
         <ul className="label-mono flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-line pt-5 text-[0.7rem] text-mute sm:justify-between">
           {t.hero.badges.map((b, i) => (
             <li key={b} className="flex items-center gap-2">
-              <span className="text-chevron">{String(i + 1).padStart(2, '0')} /</span>
+              <span className="text-faint">{String(i + 1).padStart(2, '0')} /</span>
               {b}
             </li>
           ))}

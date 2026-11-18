@@ -4,6 +4,13 @@ import '../globals.css';
 import { grotesk, mono } from '../fonts';
 import { HREFLANG, LOCALES, isLocale } from '@/i18n/config';
 import { buildMetadata } from '@/lib/seo';
+import { getDictionary } from '@/i18n';
+import type { Locale } from '@/i18n/config';
+
+const contactDict = (l: Locale) => {
+  const d = getDictionary(l);
+  return { contact: d.contact, services: d.services, plans: d.plans };
+};
 import { ContactProvider } from '@/components/contact/ContactProvider';
 import { Analytics } from '@/components/layout/Analytics';
 
@@ -39,7 +46,9 @@ export default async function LocaleLayout({ children, params }: { children: Rea
         <script dangerouslySetInnerHTML={{ __html: INIT }} />
       </head>
       <body id="top">
-        <ContactProvider>{children}</ContactProvider>
+        <ContactProvider locale={locale} dict={contactDict(locale)}>
+          {children}
+        </ContactProvider>
         <Analytics />
       </body>
     </html>

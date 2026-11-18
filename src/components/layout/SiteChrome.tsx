@@ -33,7 +33,7 @@ export function SiteChrome({ locale, legalKey, children }: { locale: Locale; leg
       </main>
       <Footer locale={locale} dict={dict} links={links} legalKey={legalKey} />
       {!legalKey && <FloatingCta locale={locale} label={dict.floating.cta} />}
-      <ContactModal locale={locale} dict={{ contact: dict.contact, services: dict.services, plans: dict.plans }} closeLabel={dict.common.close} />
+      <ContactModal closeLabel={dict.common.close} />
     </>
   );
 }

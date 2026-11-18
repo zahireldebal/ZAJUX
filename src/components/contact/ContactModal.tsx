@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useContact } from './ContactProvider';
-import { ContactForm, DRAFT_SYNC_EVENT } from './ContactForm';
-import type { ContactDict } from '@/lib/contact';
-import type { Locale } from '@/i18n/config';
+import { LazyContactForm } from './LazyContactForm';
+import { DRAFT_SYNC_EVENT } from './events';
 import { useScrollLock } from '@/lib/useScrollLock';
 import { useFocusTrap } from '@/lib/useFocusTrap';
 
 /** Formulario en modal: hoja inferior en mobile, ventana centrada en desktop. */
-export function ContactModal({ locale, dict, closeLabel }: { locale: Locale; dict: ContactDict; closeLabel: string }) {
-  const { isOpen, closeContact, plan } = useContact();
+export function ContactModal({ closeLabel }: { closeLabel: string }) {
+  const { isOpen, closeContact, plan, dict } = useContact();
   const [mounted, setMounted] = useState(false);
   const [entered, setEntered] = useState(false);
   const panel = useRef<HTMLDivElement>(null);
@@ -76,7 +75,7 @@ export function ContactModal({ locale, dict, closeLabel }: { locale: Locale; dic
           </button>
         </div>
         <div className="overflow-y-auto overscroll-contain px-5 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8 sm:py-8">
-          <ContactForm locale={locale} dict={dict} initialPlan={plan} idPrefix="modal" />
+          <LazyContactForm eager initialPlan={plan} idPrefix="modal" />
         </div>
       </div>
     </div>
