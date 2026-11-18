@@ -9,22 +9,24 @@ Lo que sigue pendiente para dar el sitio por terminado. Marcá cada ítem cuando
 - [ ] **Fotos de Juani y Zahir.** Por ahora la página "Nosotros" muestra un monograma. Para poner fotos reales, reemplazar el componente `Monogram` en [src/components/sections/About.tsx](src/components/sections/About.tsx) por un `<img>`. Recomendado: 1200×900 px, WebP, en `public/team/`.
 - [ ] **Portafolio.** Está implementado pero oculto. Cuando tengan proyectos publicados **con permiso del cliente**, agregarlos en [src/data/projects.ts](src/data/projects.ts) y poner `SHOW_PROJECTS = true` (ver README).
 
-## 2. Cloudflare
+## 2. Vercel
 
-- [ ] **Token de Cloudflare Web Analytics.** El código ya está listo. Falta crear el sitio en Web Analytics y cargar el token en `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` (**Settings → Build → Variables and secrets**). Los pasos están en el README, sección "Analítica".
+- [ ] **Crear el proyecto en Vercel** importando el repositorio y cargar `NEXT_PUBLIC_WEB3FORMS_KEY` (pasos en el README, "Publicar en Vercel").
+- [ ] **Borrar el Worker `zajux` en Cloudflare** (Workers & Pages → zajux → Settings → Delete), para que deje de intentar publicar en cada push.
+- [ ] **Analítica (opcional).** El código ya está listo: activar **Analytics** en el proyecto de Vercel y cargar `NEXT_PUBLIC_VERCEL_ANALYTICS` = `1`.
 
 ## 3. Dominio zajux.com
 
-Cuando conecten el dominio (pasos en el README):
+Cuando conecten el dominio en Vercel (pasos en el README):
 
-- [ ] Cambiar `SITE_URL` en [src/data/business.ts](src/data/business.ts) a `https://zajux.com`. Hoy es `https://zajux.zahireldebal.workers.dev`. Afecta canonical, hreflang, sitemap, robots y Open Graph.
-- [ ] Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`. Se espera al dominio para no registrar la URL de `workers.dev`.
+- [ ] Volver a desplegar: la URL pública pasa sola a `https://zajux.com` (canonical, hreflang, sitemap, robots y Open Graph). Hasta entonces se usa el dominio `*.vercel.app` del proyecto.
+- [ ] Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`. Se espera al dominio para no registrar la URL de `vercel.app`.
 - [ ] Medir con PageSpeed Insights en `/es/`, `/pt/` y `/en/`, y revisar los headers con https://securityheaders.com.
   - **Traductor de Chrome:** se decidió **no** agregar `<meta name="google" content="notranslate">`. En las pruebas locales, Lighthouse en mobile daba 90-92 en `/es/` y 72-80 en `/pt/` y `/en/`, porque el Chrome de Lighthouse está en inglés y ejecuta la detección de idioma del traductor. Un visitante real con el navegador en su idioma no lo dispara. Confirmar con PageSpeed en producción.
 
 ## 4. Para revisar con un profesional
 
-Los textos legales están en [src/i18n/legal/](src/i18n/legal/), en los 3 idiomas, y ya no tienen marcas visibles. Describen solo lo que el sitio hace de verdad, con la redacción más prudente posible. Igual conviene que los valide alguien del área. Versión vigente de la Política de Privacidad: **v1.1 (2026-11-18)**.
+Los textos legales están en [src/i18n/legal/](src/i18n/legal/), en los 3 idiomas, y ya no tienen marcas visibles. Describen solo lo que el sitio hace de verdad, con la redacción más prudente posible. Igual conviene que los valide alguien del área. Versión vigente de la Política de Privacidad: **v1.2 (2026-11-18)**: el hosting y la analítica pasaron de Cloudflare a Vercel.
 
 1. **Forma jurídica.**
    - Redactado: ZAJUX es un proyecto de Juani Hermelo (Maldonado, Uruguay) y Zahir El Debal (Manaus, Brasil), que trabajan como profesionales independientes. No es una empresa registrada. Los dos figuran como responsables de los datos.
@@ -58,13 +60,13 @@ Los textos legales están en [src/i18n/legal/](src/i18n/legal/), en los 3 idioma
      - Conviene leer a mano https://web3forms.com/privacy y https://web3forms.com/terms.
    - Fuentes: https://docs.web3forms.com/getting-started/faq · https://docs.web3forms.com/
 
-5. **Cloudflare Web Analytics.**
-   - Redactado: según la documentación de Cloudflare, no usa cookies ni almacenamiento local y no identifica ni sigue a las personas. Muestra cifras agregadas: visitas, páginas, país, dispositivo y navegador.
+5. **Hosting y analítica: Vercel.**
+   - Redactado: Vercel (Vercel Inc., Estados Unidos) aloja el sitio. Si se activa Vercel Web Analytics, según su documentación no usa cookies y cuenta las visitas con un identificador anónimo que se renueva cada día, así que no permite seguir a una persona de un día a otro ni entre sitios. Muestra cifras agregadas: páginas, referente, país o ciudad, dispositivo, sistema operativo y navegador.
    - Detalles de la documentación:
-     - No registra los parámetros de la URL (query strings).
-     - Guarda datos sin muestrear 7 días.
-     - No dice si guarda direcciones IP; solo que no las usa para identificar ni seguir a nadie.
-   - Fuentes: https://www.cloudflare.com/web-analytics/ · https://developers.cloudflare.com/web-analytics/about/ · https://developers.cloudflare.com/web-analytics/data-metrics/data-origin-and-collection/ · https://developers.cloudflare.com/web-analytics/data-metrics/dimensions/ · https://developers.cloudflare.com/web-analytics/faq/ · https://blog.cloudflare.com/privacy-first-web-analytics/
+     - El identificador es un hash de la solicitud, válido por un día; los datos de sesión se descartan a las 24 horas.
+     - No lista la dirección IP entre los datos guardados, pero tampoco dice expresamente que no la guarde.
+     - La política general de Vercel indica que procesa datos en Estados Unidos y otros países.
+   - Fuentes: https://vercel.com/docs/analytics · https://vercel.com/docs/analytics/privacy-policy · https://vercel.com/docs/analytics/quickstart · https://vercel.com/legal/privacy-policy
 
 6. **Proveedor de email.**
    - Redactado: Gmail (Google), que recibe y almacena los mensajes y las respuestas.
