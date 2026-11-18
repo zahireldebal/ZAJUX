@@ -7,7 +7,7 @@ import type { Dictionary } from '@/i18n';
 export function Contact({ locale, t, index }: { locale: Locale; t: Dictionary; index: number }) {
   const c = t.contact;
   return (
-    <section id={SECTION_IDS[locale].contact} aria-labelledby="contact-title" className="section-y relative" tabIndex={-1}>
+    <section id={SECTION_IDS[locale].contact} aria-labelledby="contact-title" className="section-y relative overflow-x-clip" tabIndex={-1}>
       <div aria-hidden="true" className="hero-glow pointer-events-none absolute bottom-0 left-1/2 -z-10 h-[50vmax] w-[50vmax] -translate-x-1/2 rounded-full opacity-60" />
       <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">

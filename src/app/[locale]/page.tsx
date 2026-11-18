@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
-import { SECTION_IDS, isLocale } from '@/i18n/config';
+import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n';
 import { SiteChrome } from '@/components/layout/SiteChrome';
 import { SectionObserver } from '@/components/layout/SectionObserver';
 import { MotionProvider } from '@/components/motion/MotionProvider';
-import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Hero } from '@/components/sections/Hero';
 import { Services } from '@/components/sections/Services';
+import { Demos } from '@/components/sections/Demos';
 import { Process } from '@/components/sections/Process';
 import { Why } from '@/components/sections/Why';
 import { Plans } from '@/components/sections/Plans';
@@ -28,11 +28,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <SectionObserver locale={locale} />
       <Hero locale={locale} t={t} />
       <Services locale={locale} t={t} index={1} />
-      <section id={SECTION_IDS[locale].demos} className="section-y" tabIndex={-1}>
-        <div className="container-x">
-          <SectionHeading index={2} eyebrow={t.demos.eyebrow} title={t.demos.title} intro={t.demos.intro} id="demos-title" />
-        </div>
-      </section>
+      <Demos locale={locale} t={t} index={2} />
       <Process locale={locale} t={t.process} index={3} />
       <Why locale={locale} t={t} index={4} />
       <Plans locale={locale} t={t} index={5} />
