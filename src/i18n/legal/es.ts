@@ -74,7 +74,7 @@ const legal: LegalContent = {
             'Web3Forms (Web3Creative, India): recibe el formulario cuando elegís "Enviar por email" y nos lo reenvía por correo. Según su documentación, no guarda el contenido de los formularios, sus servidores están en Estados Unidos y sus registros técnicos, que pueden incluir datos como la dirección IP, se borran periódicamente.',
             'Gmail (Google): es nuestro proveedor de correo electrónico. Recibe y almacena los mensajes que nos enviás por email y nuestras respuestas.',
             'WhatsApp (Meta): solo si elegís ese canal. El mensaje lo enviás vos desde tu aplicación, con las condiciones de WhatsApp.',
-            'Vercel (Vercel Inc., Estados Unidos): aloja el sitio. Si medimos visitas, lo hacemos con Vercel Web Analytics, que no usa cookies y no identifica a las personas (ver la Política de Cookies).',
+            'Cloudflare: aloja el sitio. Si medimos visitas, lo hacemos con Cloudflare Web Analytics, que no usa cookies y no identifica a las personas (ver la Política de Cookies).',
           ],
         ],
       },
@@ -150,7 +150,7 @@ const legal: LegalContent = {
         id: 'analitica',
         title: 'Analítica sin cookies',
         blocks: [
-          'Si medimos visitas, usamos Vercel Web Analytics. Según la documentación de Vercel, no usa cookies: cuenta las visitas con un identificador anónimo que se renueva cada día, así que no permite seguir a una persona de un día a otro ni entre sitios. Solo nos muestra cifras agregadas, como la cantidad de visitas, las páginas más vistas, de dónde llegan, el país o la ciudad, el tipo de dispositivo, el sistema operativo o el navegador.',
+          'Si medimos visitas, usamos Cloudflare Web Analytics. Según la documentación de Cloudflare, no usa cookies ni almacenamiento local, y no identifica ni sigue a las personas. Solo nos muestra cifras agregadas, como la cantidad de visitas, las páginas más vistas, el país, el tipo de dispositivo o el navegador.',
         ],
       },
       {

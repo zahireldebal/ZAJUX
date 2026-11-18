@@ -3,15 +3,8 @@
  * Los números de WhatsApp van en formato internacional, solo dígitos (wa.me).
  */
 
-/**
- * URL pública del sitio, sin barra final. En Vercel sale sola del dominio de producción
- * (VERCEL_PROJECT_PRODUCTION_URL): hoy *.vercel.app y, al conectar el dominio, zajux.com.
- * NEXT_PUBLIC_SITE_URL permite forzarla; fuera de Vercel se usa el valor por defecto.
- */
-const vercelDomain = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? (vercelDomain ? `https://${vercelDomain}` : 'https://zajux.vercel.app')
-).replace(/\/$/, '');
+/** URL pública del sitio (Cloudflare Workers), sin barra final. Cambiar a https://zajux.com al conectar el dominio. */
+export const SITE_URL = 'https://zajux.zahireldebal.workers.dev';
 
 export const BUSINESS = {
   name: 'ZAJUX',
@@ -58,7 +51,7 @@ export const PEOPLE = {
 >;
 
 /** Versión vigente de la Política de Privacidad (se registra en cada envío de email). */
-export const PRIVACY_POLICY = { version: '1.2', date: '2026-11-18' } as const;
+export const PRIVACY_POLICY = { version: '1.1', date: '2026-11-18' } as const;
 
 /** Fecha de última actualización de los textos legales. */
 export const LEGAL_UPDATED = '2026-11-18';

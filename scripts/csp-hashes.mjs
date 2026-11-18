@@ -1,27 +1,27 @@
 /**
  * Después de `next build`: recorre out/**\/*.html, calcula el hash SHA-256 de cada
- * <script> inline ejecutable e inserta en cada página una Content-Security-Policy como
- * <meta http-equiv>, justo después de <meta charset>. Así la CSP no necesita
- * 'unsafe-inline' para scripts y no depende del hosting (los hashes cambian en cada build).
+ * <script> inline ejecutable y agrega a out/_headers una Content-Security-Policy por
+ * página. Así la CSP no necesita 'unsafe-inline' para scripts.
  *
- * Lo que una CSP en <meta> no admite (frame-ancestors) va como header en vercel.json,
- * junto con X-Frame-Options.
+ * (Cloudflare combina headers de reglas que coinciden; por eso la CSP va solo en
+ * reglas por página y no en "/*".)
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
 const OUT = path.resolve('out');
+const HEADERS = path.join(OUT, '_headers');
 
 if (!fs.existsSync(OUT)) {
   console.error('csp-hashes: no existe /out. Corré `next build` primero.');
   process.exit(1);
 }
 
-const ANALYTICS = process.env.NEXT_PUBLIC_VERCEL_ANALYTICS === '1';
+const ANALYTICS = !!process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN;
 
 function policy(hashes) {
-  const scriptSrc = ["'self'", ...hashes.map((h) => `'sha256-${h}'`)];
+  const scriptSrc = ["'self'", ...hashes.map((h) => `'sha256-${h}'`), 'https://static.cloudflareinsights.com'];
   return [
     "default-src 'self'",
     `script-src ${scriptSrc.join(' ')}`,
@@ -29,9 +29,9 @@ function policy(hashes) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
-    // Vercel Web Analytics usa rutas del mismo dominio (/_vercel/insights/*): alcanza con 'self'
-    "connect-src 'self' https://api.web3forms.com",
+    `connect-src 'self' https://api.web3forms.com${ANALYTICS ? ' https://cloudflareinsights.com' : ''}`,
     "form-action 'self' https://api.web3forms.com",
+    "frame-ancestors 'none'",
     "base-uri 'self'",
     "object-src 'none'",
     'upgrade-insecure-requests',
@@ -46,8 +46,7 @@ function walk(dir) {
 }
 
 const SCRIPT_RE = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
-const CHARSET_RE = /<meta charSet="utf-8"\/>/i;
-let pages = 0;
+const rules = [];
 let total = 0;
 
 for (const file of walk(OUT)) {
@@ -61,15 +60,18 @@ for (const file of walk(OUT)) {
     if (/type\s*=\s*["']?application\/(ld\+)?json/i.test(attrs)) continue;
     hashes.add(crypto.createHash('sha256').update(body, 'utf8').digest('base64'));
   }
-  const charset = html.match(CHARSET_RE);
-  if (!charset || html.indexOf('<script') < (charset.index ?? 0)) {
-    console.error(`csp-hashes: ${path.relative(OUT, file)} no tiene <meta charset> antes de los scripts.`);
-    process.exit(1);
-  }
-  const meta = `<meta http-equiv="Content-Security-Policy" content="${policy([...hashes])}"/>`;
-  fs.writeFileSync(file, html.replace(CHARSET_RE, (m) => m + meta));
-  pages++;
   total += hashes.size;
+
+  const rel = '/' + path.relative(OUT, file).split(path.sep).join('/');
+  // /es/index.html → /es/ ; /404.html → /404.html (Cloudflare la sirve para rutas inexistentes)
+  const routes = rel.endsWith('/index.html') ? [rel.slice(0, -'index.html'.length)] : [rel, rel.replace(/\.html$/, '')];
+  const csp = policy([...hashes]);
+  for (const r of routes) rules.push(`${r}\n  Content-Security-Policy: ${csp}`);
 }
 
-console.log(`csp-hashes: ${pages} páginas, ${total} hashes${ANALYTICS ? ' (con analítica)' : ''}.`);
+const base = fs.existsSync(HEADERS) ? fs.readFileSync(HEADERS, 'utf8').trimEnd() : '';
+fs.writeFileSync(HEADERS, `${base}\n\n# --- CSP por página (generado) ---\n${rules.join('\n\n')}\n`);
+
+const longest = Math.max(...rules.map((r) => r.length));
+console.log(`csp-hashes: ${rules.length} reglas, ${total} hashes; línea más larga ${longest} caracteres.`);
+if (longest > 2000) console.warn('csp-hashes: ⚠ alguna línea supera 2000 caracteres (límite de Cloudflare Pages).');

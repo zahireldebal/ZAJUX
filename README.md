@@ -1,7 +1,7 @@
 # ZAJUX · Sitio web
 
 Sitio del estudio ZAJUX (diseño y desarrollo web, Uruguay · Brasil), en español, portugués e inglés.
-Next.js (App Router) con exportación estática, publicado en Vercel.
+Next.js (App Router) con exportación estática, publicado en Cloudflare Workers (recursos estáticos).
 
 - **Stack:** Next.js 16, TypeScript, Tailwind CSS 4, GSAP (ScrollTrigger y SplitText), Lenis, React Hook Form + Zod.
 - **Pruebas:** Vitest (lógica) y Playwright (flujos, idiomas y accesibilidad con axe).
@@ -16,7 +16,7 @@ Requiere Node 20 o superior (probado con Node 24).
 ```bash
 npm install
 npm run dev          # desarrollo en http://localhost:3000
-npm run build        # exportación estática en /out (cada página lleva su CSP)
+npm run build        # exportación estática en /out (incluye _headers con la CSP)
 npm start            # sirve /out en http://localhost:3000
 ```
 
@@ -52,7 +52,7 @@ src/
 scripts/
   build-logo.mjs       genera el logo SVG, favicons, íconos y las imágenes Open Graph
   defer-hydration.mjs  post-build: ejecuta los scripts después de la primera pintura
-  csp-hashes.mjs       post-build: agrega a cada página su Content-Security-Policy (meta)
+  csp-hashes.mjs       post-build: agrega la Content-Security-Policy por página a out/_headers
   dev/                 herramientas de prueba (capturas, Lighthouse, traces)
 tests/e2e/             pruebas de Playwright
 ```
@@ -126,45 +126,59 @@ La página `/es/proyectos/` (y sus versiones en pt y en), su link en el menú y 
 
 ## Variables de entorno
 
-Copiar `.env.example` a `.env.local` para desarrollo (`.env.local` está en `.gitignore` y no se sube). En Vercel, las variables van en **Project → Settings → Environment Variables**.
+Copiar `.env.example` a `.env.local` para desarrollo (`.env.local` está en `.gitignore` y no se sube). En Cloudflare, las variables van en el Worker: **Settings → Build → Variables and secrets**.
 
 | Variable | Para qué | Si no está |
 |---|---|---|
 | `NEXT_PUBLIC_WEB3FORMS_KEY` | Envío del formulario por email ([web3forms.com](https://web3forms.com)). Es una clave pública. | Se usa `mailto:` |
-| `NEXT_PUBLIC_VERCEL_ANALYTICS` | `1` para cargar Vercel Web Analytics (sin cookies) | No se carga analítica |
-| `NEXT_PUBLIC_SITE_URL` | Opcional: fuerza la URL pública | En Vercel se usa el dominio de producción |
+| `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (sin cookies) | No se carga analítica |
 
-Las variables `NEXT_PUBLIC_*` se incorporan **en el build**: después de cambiarlas en Vercel, hay que volver a desplegar (**Deployments → ⋯ → Redeploy**).
+Las variables `NEXT_PUBLIC_*` se incorporan **en el build**: después de cambiarlas en Cloudflare, hay que volver a desplegar.
 
-## Publicar en Vercel
+## Publicar en Cloudflare Workers
 
-La configuración está en [vercel.json](vercel.json): Vercel corre `npm run build` y publica la carpeta `out/` como sitio estático, con los headers de seguridad.
+El sitio se publica como **Worker con recursos estáticos**: Cloudflare corre `npm run build` y después `npx wrangler deploy`, que sube la carpeta `out/` según [wrangler.jsonc](wrangler.jsonc).
 
-1. Entrar a https://vercel.com con la cuenta de GitHub y elegir **Add New → Project**.
-2. Importar el repositorio `zahireldebal/ZAJUX`. No hace falta tocar el preset ni los comandos: los toma de `vercel.json`.
-3. En **Environment Variables**, cargar `NEXT_PUBLIC_WEB3FORMS_KEY` con la clave de Web3Forms.
-4. **Deploy.** Cada `git push` a `main` vuelve a publicar; cada rama o pull request tiene su propia vista previa.
+1. En Cloudflare: **Workers & Pages → Create → Import a repository**, y elegir el repositorio `zahireldebal/ZAJUX`, rama `main`.
+2. Configuración del build:
+   - **Project name:** `zajux` (tiene que coincidir con `"name"` en `wrangler.jsonc`).
+   - **Build command:** `npm run build`
+   - **Deploy command:** `npx wrangler deploy`
+3. Variables: en el Worker, **Settings → Build → Variables and secrets**. Cargar `NODE_VERSION` = `24`, `NEXT_PUBLIC_WEB3FORMS_KEY` y, cuando la tengan, `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`.
+4. Cada `git push` a `main` vuelve a publicar en `https://zajux.zahireldebal.workers.dev`.
 
-La URL pública (canonical, hreflang, sitemap, Open Graph) se toma sola del dominio de producción de Vercel (`VERCEL_PROJECT_PRODUCTION_URL`). No hay que editar `SITE_URL`.
+`wrangler.jsonc` define:
+
+- `assets.directory: "./out"`: la exportación estática.
+- `not_found_handling: "404-page"`: las rutas inexistentes muestran `out/404.html`.
+- `out/_headers` (generado en el build) aplica los headers de seguridad y la CSP por página.
+
+Para probar el deploy sin publicar: `npm run build && npx wrangler deploy --dry-run`.
 
 ### Conectar el dominio zajux.com
 
-1. En el proyecto: **Settings → Domains → Add**, escribir `zajux.com` y aceptar la sugerencia de redirigir `www.zajux.com` a `zajux.com`.
-2. Vercel muestra los registros DNS a crear donde se compró el dominio: un registro `A` para `zajux.com` y un `CNAME` para `www`. Los valores exactos aparecen en esa pantalla.
-3. Volver a desplegar para que la URL pública pase a `https://zajux.com`.
+1. En el Worker: **Settings → Domains & Routes → Add → Custom domain → `zajux.com`**, y repetir con `www.zajux.com`.
+   - Si el dominio ya está en Cloudflare, los registros DNS se crean solos.
+   - Si no, primero hay que agregar el dominio a Cloudflare y cambiar los nameservers donde se compró.
+2. Para que `www` redirija al dominio principal: **Rules → Redirect Rules**, de `www.zajux.com/*` a `https://zajux.com/$1` (301).
+3. Cambiar `SITE_URL` a `https://zajux.com` en [src/data/business.ts](src/data/business.ts), hacer commit y push.
 4. Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`.
 
-### Analítica (Vercel Web Analytics)
+### Analítica (Cloudflare Web Analytics)
 
-1. En el proyecto: **Analytics → Enable**.
-2. Cargar `NEXT_PUBLIC_VERCEL_ANALYTICS` = `1` en **Settings → Environment Variables** y volver a desplegar.
+El código ya está listo: si existe `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`, cada página carga el script de Cloudflare y la CSP permite `cloudflareinsights.com`. Sin el token no se carga nada.
 
-El script se sirve desde el mismo dominio (`/_vercel/insights/script.js`), sin cookies.
+Cómo conseguir el token:
+
+1. En el panel de Cloudflare, abrir **Web Analytics** y elegir **Add a site**.
+2. En **Set up hostname**, escribir el dominio del sitio (hoy `zajux.zahireldebal.workers.dev`; después, `zajux.com`) y confirmar con **Done**.
+3. En **Manage site**, copiar el fragmento de JavaScript. El token es el valor de `"token"` dentro de `data-cf-beacon='{"token": "…"}'`. Solo hace falta ese valor, no el fragmento entero.
+4. Cargarlo como `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` en **Settings → Build → Variables and secrets** y volver a desplegar (las variables `NEXT_PUBLIC_*` se incorporan en el build).
 
 ## Seguridad
 
-- [vercel.json](vercel.json) define los headers comunes: `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, `frame-ancestors 'none'`, HSTS y caché de los recursos estáticos.
-- En cada build, `scripts/csp-hashes.mjs` agrega a cada página una **Content-Security-Policy** (etiqueta `<meta>`), con el hash SHA-256 de cada script inline. Así no hace falta `'unsafe-inline'` para scripts, y la política también se aplica al probar en local. Solo se permiten conexiones al mismo dominio y a `api.web3forms.com`.
+- [public/_headers](public/_headers) define los headers comunes: `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, HSTS y caché de los recursos estáticos.
+- En cada build, `scripts/csp-hashes.mjs` agrega una **Content-Security-Policy por página**, con el hash SHA-256 de cada script inline. Así no hace falta `'unsafe-inline'` para scripts. Solo se permiten conexiones a `api.web3forms.com` y a Cloudflare Insights.
 - Si agregan un servicio externo (por ejemplo, un widget de reservas), hay que sumarlo a la política en `scripts/csp-hashes.mjs`.
 
 ## Logo e imágenes

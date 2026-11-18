@@ -74,7 +74,7 @@ const legal: LegalContent = {
             'Web3Forms (Web3Creative, Índia): recebe o formulário quando você escolhe "Enviar por e-mail" e o encaminha para nós por e-mail. Segundo a sua documentação, não armazena o conteúdo dos formulários, seus servidores ficam nos Estados Unidos e seus registros técnicos, que podem incluir dados como o endereço IP, são apagados periodicamente.',
             'Gmail (Google): é o nosso provedor de e-mail. Recebe e armazena as mensagens que você nos envia por e-mail e as nossas respostas.',
             'WhatsApp (Meta): apenas se você escolher esse canal. A mensagem é enviada por você, pelo seu aplicativo, conforme as condições do WhatsApp.',
-            'Vercel (Vercel Inc., Estados Unidos): hospeda o site. Se medirmos visitas, usamos o Vercel Web Analytics, que não usa cookies e não identifica as pessoas (veja a Política de Cookies).',
+            'Cloudflare: hospeda o site. Se medirmos visitas, usamos o Cloudflare Web Analytics, que não usa cookies e não identifica as pessoas (veja a Política de Cookies).',
           ],
         ],
       },
@@ -148,7 +148,7 @@ const legal: LegalContent = {
         id: 'analitica',
         title: 'Análise sem cookies',
         blocks: [
-          'Se medirmos visitas, usamos o Vercel Web Analytics. Segundo a documentação da Vercel, ele não usa cookies: conta as visitas com um identificador anônimo que é renovado a cada dia, então não permite acompanhar uma pessoa de um dia para outro nem entre sites. Mostra apenas números agregados, como quantidade de visitas, páginas mais vistas, de onde as pessoas chegam, país ou cidade, tipo de dispositivo, sistema operacional ou navegador.',
+          'Se medirmos visitas, usamos o Cloudflare Web Analytics. Segundo a documentação da Cloudflare, ele não usa cookies nem armazenamento local, e não identifica nem acompanha as pessoas. Mostra apenas números agregados, como quantidade de visitas, páginas mais vistas, país, tipo de dispositivo ou navegador.',
         ],
       },
       {

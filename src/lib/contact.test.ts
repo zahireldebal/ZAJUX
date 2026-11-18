@@ -132,9 +132,9 @@ describe('validación', () => {
 describe('email', () => {
   const now = new Date('2026-11-17T21:04:05.000Z');
   it.each<[Locale, string, string]>([
-    ['es', 'privacidad v1.2 · 2026-11-18', 'es'],
-    ['pt', 'privacidade v1.2 · 2026-11-18', 'pt-BR'],
-    ['en', 'privacy v1.2 · 2026-11-18', 'en'],
+    ['es', 'privacidad v1.1 · 2026-11-18', 'es'],
+    ['pt', 'privacidade v1.1 · 2026-11-18', 'pt-BR'],
+    ['en', 'privacy v1.1 · 2026-11-18', 'en'],
   ])('%s: incluye fecha UTC e ISO, idioma y versión de la política', (locale, version, lang) => {
     const p = buildEmailPayload(full, getDictionary(locale), locale, now);
     expect(p.message).toContain('2026-11-17 21:04:05 UTC');
@@ -164,7 +164,7 @@ describe('email', () => {
     expect(r).toEqual({ ok: true, via: 'web3forms' });
     const body = JSON.parse(fetcher.mock.calls[0]![1].body);
     expect(body.access_key).toBe('clave-de-prueba');
-    expect(body.message).toContain('privacidad v1.2');
+    expect(body.message).toContain('privacidad v1.1');
   });
 
   it('informa el error si Web3Forms falla', async () => {
