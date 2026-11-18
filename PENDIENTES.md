@@ -11,8 +11,8 @@ Lo que sigue pendiente para dar el sitio por terminado. Marcá cada ítem cuando
 
 ## 2. Cloudflare
 
-- [ ] **Crear de nuevo el proyecto** (se había borrado): **Workers & Pages → Create → Import a repository**, repositorio `ZAJUX`, nombre `zajux` (pasos en el README, "Publicar en Cloudflare Workers").
-- [ ] **Cargar la clave de Web3Forms** en `NEXT_PUBLIC_WEB3FORMS_KEY` (**Settings → Build → Variables and secrets**) y `NODE_VERSION` = `24`. Sin la clave, "Enviar por email" abre el programa de correo de la persona.
+- [x] **Crear de nuevo el proyecto** (se había borrado): **Workers & Pages → Create → Import a repository**, repositorio `ZAJUX`, nombre `zajux` (pasos en el README, "Publicar en Cloudflare Workers").
+- [x] **Cargar la clave de Web3Forms** en `NEXT_PUBLIC_WEB3FORMS_KEY` (**Settings → Build → Variables and secrets**) y `NODE_VERSION` = `24`. Sin la clave, "Enviar por email" abre el programa de correo de la persona.
 
 - [ ] **Token de Cloudflare Web Analytics.** El código ya está listo. Falta crear el sitio en Web Analytics y cargar el token en `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` (**Settings → Build → Variables and secrets**). Los pasos están en el README, sección "Analítica".
 
