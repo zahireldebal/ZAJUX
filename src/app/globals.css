@@ -304,9 +304,16 @@
   }
 }
 
-/* Estado inicial de los revelados: solo se ocultan si hay JS y movimiento. */
-html.js-motion [data-reveal] {
+/* Estado inicial de los revelados: solo se ocultan si hay JS y movimiento.
+   Si el JS de animación no arranca en 3,5 s, el script de <head> quita "js-motion". */
+html.js-motion [data-reveal],
+html.js-motion [data-reveal-item],
+html.js-motion [data-split] {
   opacity: 0;
+}
+.split-line {
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -452,5 +459,23 @@ html.js-motion .hero-ring-spin {
 @keyframes zajux-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Proceso: en desktop con movimiento, los pasos se apilan en la misma celda */
+.process-num {
+  font-size: clamp(5rem, 8vw, 7.5rem);
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(198 244 50 / 0.55);
+}
+@media (width >= 64rem) {
+  html.js-motion .process-stage {
+    display: grid;
+  }
+  html.js-motion .process-stage > .process-step {
+    grid-area: 1 / 1;
+  }
+  html.js-motion .process-stage > .process-step:not(:first-child) {
+    opacity: 0;
   }
 }

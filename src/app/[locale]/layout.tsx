@@ -25,8 +25,9 @@ export const viewport: Viewport = { themeColor: '#0F1115', colorScheme: 'dark' }
  * - "js": hay JavaScript.
  * - "js-motion": se permiten animaciones (sin prefers-reduced-motion).
  * - "intro-pending": la intro del logo todavía no se vio en esta sesión.
+ * Red de seguridad: si las animaciones no arrancan en 3,5 s, se muestra todo sin animar.
  */
-const INIT = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion');var s=null;try{s=sessionStorage.getItem('zajux:intro')}catch(e){}if(!s)d.classList.add('intro-pending')}}catch(e){}})();`;
+const INIT = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion');var s=null;try{s=sessionStorage.getItem('zajux:intro')}catch(e){}if(!s)d.classList.add('intro-pending');setTimeout(function(){if(!d.classList.contains('motion-ready'))d.classList.remove('js-motion','intro-pending')},3500)}}catch(e){}})();`;
 
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
