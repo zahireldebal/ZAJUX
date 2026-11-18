@@ -29,6 +29,9 @@ export function MotionProvider() {
     const html = document.documentElement;
     if (prefersReducedMotion() || !html.classList.contains("js-motion")) return;
 
+    // El JavaScript arrancó: la red de seguridad del <head> ya no hace falta.
+    html.classList.add("motion-ready");
+
     // Se arma cuando el navegador queda libre: no compite con la primera pintura ni con la intro.
     let disposed = false;
     let cleanup = () => {};
@@ -54,7 +57,6 @@ function setup(
   { gsap, ScrollTrigger, SplitText }: ScrollPlugins,
   LenisCtor: typeof Lenis,
 ): () => void {
-  const html = document.documentElement;
   let lenis: Lenis | null = null;
 
   // ---------- Scroll suave ----------
@@ -189,7 +191,6 @@ function setup(
   };
   const raf = requestAnimationFrame(() => requestAnimationFrame(settle));
   document.fonts?.ready.then(settle).catch(() => {});
-  html.classList.add("motion-ready");
 
   return () => {
     cancelAnimationFrame(raf);
