@@ -1,0 +1,44 @@
+import type { Metadata, Viewport } from 'next';
+import { notFound } from 'next/navigation';
+import '../globals.css';
+import { grotesk, mono } from '../fonts';
+import { HREFLANG, LOCALES, isLocale } from '@/i18n/config';
+import { buildMetadata } from '@/lib/seo';
+import { ContactProvider } from '@/components/contact/ContactProvider';
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return buildMetadata(locale);
+}
+
+export const viewport: Viewport = { themeColor: '#0F1115', colorScheme: 'dark' };
+
+/**
+ * Corre antes de la primera pintura:
+ * - "js": hay JavaScript.
+ * - "js-motion": se permiten animaciones (sin prefers-reduced-motion).
+ * - "intro-pending": la intro del logo todavía no se vio en esta sesión.
+ */
+const INIT = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion');var s=null;try{s=sessionStorage.getItem('zajux:intro')}catch(e){}if(!s)d.classList.add('intro-pending')}}catch(e){}})();`;
+
+export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+  return (
+    <html lang={HREFLANG[locale]} className={`${grotesk.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: INIT }} />
+      </head>
+      <body id="top">
+        <ContactProvider>{children}</ContactProvider>
+      </body>
+    </html>
+  );
+}

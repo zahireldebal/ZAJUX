@@ -1,0 +1,329 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ */
+/* Tokens de diseño ZAJUX                                             */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* Paleta (del logo). Contrastes verificados: paper/ink 17.2, mute/ink 8.2, lime/ink 14.8 */
+  --color-ink: #0f1115;
+  --color-ink-2: #14171d;
+  --color-surface: #1c2029;
+  --color-surface-2: #242936;
+  --color-paper: #f5f4f0;
+  --color-mute: #a7abb5;
+  --color-chevron: #6b7280;
+  --color-lime: #c6f432;
+  --color-lime-deep: #a9d61c;
+  --color-line: rgb(245 244 240 / 0.1);
+  --color-line-strong: rgb(245 244 240 / 0.2);
+  --color-danger: #ff8a7a;
+
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: var(--font-spacemono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Escala tipográfica fluida (375 px → 1440 px) */
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);
+  --text-display--line-height: 0.98;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(2.25rem, 1.5rem + 3.4vw, 4.75rem);
+  --text-h1--line-height: 1.02;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(1.875rem, 1.35rem + 2.3vw, 3.5rem);
+  --text-h2--line-height: 1.06;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.015em;
+  --text-lead: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.14em;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --radius-card: 1.25rem;
+  --breakpoint-xs: 26rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 5.5rem;
+    background: var(--color-ink);
+  }
+
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:not(.lenis) {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  button,
+  [role='button'],
+  summary {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* evita el zoom automático en iOS */
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilidades y componentes                                           */
+/* ------------------------------------------------------------------ */
+@utility container-x {
+  width: 100%;
+  max-width: 82rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+@utility section-y {
+  padding-block: 5.5rem;
+  @media (width >= 64rem) {
+    padding-block: 9rem;
+  }
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+}
+
+/* Botones: relleno que entra desde un lado (solo transform) y presión a 0.97 */
+@layer components {
+  .btn {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.375rem;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.975rem;
+    line-height: 1.2;
+    overflow: hidden;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+      color 0.45s var(--ease-out-expo),
+      border-color 0.45s var(--ease-out-expo),
+      transform 0.2s var(--ease-out-quart);
+  }
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.55s var(--ease-out-expo);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn .btn-arrow {
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+
+  .btn-primary {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+  .btn-primary::before {
+    background: var(--color-paper);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--color-line-strong);
+    color: var(--color-paper);
+  }
+  .btn-ghost::before {
+    background: var(--color-lime);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover::before {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+    .btn-ghost:hover {
+      color: var(--color-ink);
+      border-color: var(--color-lime);
+    }
+    .btn:hover .btn-arrow {
+      transform: translateX(3px);
+    }
+  }
+
+  /* Link con subrayado que crece */
+  .link-grow {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-grow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-grow:hover::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+  }
+  .link-grow[aria-current='true']::after,
+  .link-grow[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  /* Tarjeta con leve desplazamiento y borde que se ilumina */
+  .card {
+    position: relative;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-ink-2);
+    transition:
+      transform 0.6s var(--ease-out-expo),
+      border-color 0.6s var(--ease-out-expo),
+      background-color 0.6s var(--ease-out-expo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-hover:hover {
+      transform: translateY(-4px);
+      border-color: rgb(198 244 50 / 0.45);
+      background: var(--color-surface);
+    }
+  }
+
+  /* Campos de formulario */
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line-strong);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    transition: border-color 0.3s var(--ease-out-quart);
+  }
+  .field::placeholder {
+    color: #7f8491; /* 5.0:1 sobre ink */
+  }
+  .field:hover {
+    border-color: rgb(245 244 240 / 0.35);
+  }
+  .field:focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+  select.field {
+    appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23A7ABB5' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
+}
+
+/* Estado inicial de los revelados: solo se ocultan si hay JS y movimiento. */
+html.js-motion [data-reveal] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
