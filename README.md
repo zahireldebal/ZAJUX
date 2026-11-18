@@ -132,6 +132,7 @@ Copiar `.env.example` a `.env.local` para desarrollo (`.env.local` está en `.gi
 |---|---|---|
 | `NEXT_PUBLIC_WEB3FORMS_KEY` | Envío del formulario por email ([web3forms.com](https://web3forms.com)). Es una clave pública. | Se usa `mailto:` |
 | `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics (sin cookies) | No se carga analítica |
+| `NEXT_PUBLIC_SITE_URL` | URL pública (canonical, hreflang, sitemap, Open Graph) | `https://zajux.zahireldebal.workers.dev` |
 
 Las variables `NEXT_PUBLIC_*` se incorporan **en el build**: después de cambiarlas en Cloudflare, hay que volver a desplegar.
 
@@ -144,7 +145,8 @@ El sitio se publica como **Worker con recursos estáticos**: Cloudflare corre `n
    - **Project name:** `zajux` (tiene que coincidir con `"name"` en `wrangler.jsonc`).
    - **Build command:** `npm run build`
    - **Deploy command:** `npx wrangler deploy`
-3. Variables: en el Worker, **Settings → Build → Variables and secrets**. Cargar `NODE_VERSION` = `24`, `NEXT_PUBLIC_WEB3FORMS_KEY` y, cuando la tengan, `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`.
+3. Variables: en el Worker, **Settings → Build → Variables and secrets**. Cargar `NODE_VERSION` = `24` y `NEXT_PUBLIC_WEB3FORMS_KEY` (la clave de Web3Forms; sin ella, "Enviar por email" abre el programa de correo). Cuando la tengan, también `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`.
+   - Después de cargar o cambiar variables, hay que volver a desplegar (**Deployments → Retry deployment**, o un nuevo push): se incorporan en el build.
 4. Cada `git push` a `main` vuelve a publicar en `https://zajux.zahireldebal.workers.dev`.
 
 `wrangler.jsonc` define:
@@ -161,7 +163,7 @@ Para probar el deploy sin publicar: `npm run build && npx wrangler deploy --dry-
    - Si el dominio ya está en Cloudflare, los registros DNS se crean solos.
    - Si no, primero hay que agregar el dominio a Cloudflare y cambiar los nameservers donde se compró.
 2. Para que `www` redirija al dominio principal: **Rules → Redirect Rules**, de `www.zajux.com/*` a `https://zajux.com/$1` (301).
-3. Cambiar `SITE_URL` a `https://zajux.com` en [src/data/business.ts](src/data/business.ts), hacer commit y push.
+3. Cargar `NEXT_PUBLIC_SITE_URL` = `https://zajux.com` en **Settings → Build → Variables and secrets** y volver a desplegar. No hace falta tocar código.
 4. Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`.
 
 ### Analítica (Cloudflare Web Analytics)

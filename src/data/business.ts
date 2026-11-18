@@ -3,8 +3,12 @@
  * Los números de WhatsApp van en formato internacional, solo dígitos (wa.me).
  */
 
-/** URL pública del sitio (Cloudflare Workers), sin barra final. Cambiar a https://zajux.com al conectar el dominio. */
-export const SITE_URL = 'https://zajux.zahireldebal.workers.dev';
+/**
+ * URL pública del sitio, sin barra final. Por defecto, la de Cloudflare Workers.
+ * Al conectar zajux.com no hace falta tocar código: cargar NEXT_PUBLIC_SITE_URL=https://zajux.com
+ * en Cloudflare (Settings → Build → Variables and secrets) y volver a desplegar.
+ */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://zajux.zahireldebal.workers.dev').replace(/\/+$/, '');
 
 export const BUSINESS = {
   name: 'ZAJUX',

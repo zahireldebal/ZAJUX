@@ -11,13 +11,16 @@ Lo que sigue pendiente para dar el sitio por terminado. Marcá cada ítem cuando
 
 ## 2. Cloudflare
 
+- [ ] **Crear de nuevo el proyecto** (se había borrado): **Workers & Pages → Create → Import a repository**, repositorio `ZAJUX`, nombre `zajux` (pasos en el README, "Publicar en Cloudflare Workers").
+- [ ] **Cargar la clave de Web3Forms** en `NEXT_PUBLIC_WEB3FORMS_KEY` (**Settings → Build → Variables and secrets**) y `NODE_VERSION` = `24`. Sin la clave, "Enviar por email" abre el programa de correo de la persona.
+
 - [ ] **Token de Cloudflare Web Analytics.** El código ya está listo. Falta crear el sitio en Web Analytics y cargar el token en `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` (**Settings → Build → Variables and secrets**). Los pasos están en el README, sección "Analítica".
 
 ## 3. Dominio zajux.com
 
 Cuando conecten el dominio (pasos en el README):
 
-- [ ] Cambiar `SITE_URL` en [src/data/business.ts](src/data/business.ts) a `https://zajux.com`. Hoy es `https://zajux.zahireldebal.workers.dev`. Afecta canonical, hreflang, sitemap, robots y Open Graph.
+- [ ] Cargar `NEXT_PUBLIC_SITE_URL` = `https://zajux.com` en Cloudflare y volver a desplegar (sin tocar código). Hoy la URL es `https://zajux.zahireldebal.workers.dev`. Afecta canonical, hreflang, sitemap, robots y Open Graph.
 - [ ] Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`. Se espera al dominio para no registrar la URL de `workers.dev`.
 - [ ] Medir con PageSpeed Insights en `/es/`, `/pt/` y `/en/`, y revisar los headers con https://securityheaders.com.
   - **Traductor de Chrome:** se decidió **no** agregar `<meta name="google" content="notranslate">`. En las pruebas locales, Lighthouse en mobile daba 90-92 en `/es/` y 72-80 en `/pt/` y `/en/`, porque el Chrome de Lighthouse está en inglés y ejecuta la detección de idioma del traductor. Un visitante real con el navegador en su idioma no lo dispara. Confirmar con PageSpeed en producción.
