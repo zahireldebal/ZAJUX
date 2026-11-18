@@ -36,18 +36,19 @@ npm run typecheck
 src/
   app/
     (root)/            raíz "/": detecta el idioma y redirige (con enlaces si no hay JavaScript)
-    [locale]/          /es /pt /en: página de inicio y páginas legales ([slug])
+    [locale]/          /es /pt /en: inicio (logo + contacto)
+    [locale]/[slug]/   páginas del menú (servicios, proceso, planes…) y páginas legales
     global-not-found   404 en los tres idiomas
     sitemap.ts · robots.ts · manifest.ts
   components/
-    intro/             intro del logo (órbita de la X)
-    sections/          Hero, Servicios, Demos, Proceso, Por qué, Planes, Nosotros, Proyectos, FAQ, Contacto
+    intro/             logo del inicio: órbita de la X, estela, anillo y vueltas en reposo
+    sections/          Hero, Servicios, Por qué, Proceso, Planes, Nosotros, Proyectos, FAQ, Contacto, cierre de página
+    pages/             armado de cada página del menú y de las páginas legales
     contact/           formulario, modal, botón flotante, tarjetas de WhatsApp
-    demos/             reserva de turno, formulario a WhatsApp, antes/después
-    layout/            navbar, menú mobile, selector de idioma, footer
+    layout/            barra de navegación, menú mobile, selector de idioma, footer
   i18n/                es.ts, pt.ts, en.ts (todos los textos) y legal/ (políticas)
   data/                business.ts (datos del negocio) y projects.ts (portafolio)
-  lib/                 contact.ts (mensajes, WhatsApp, email), SEO, utilidades
+  lib/                 contact.ts (mensajes, WhatsApp, email), nav.ts (páginas del menú), SEO, utilidades
 scripts/
   build-logo.mjs       genera el logo SVG, favicons, íconos y las imágenes Open Graph
   defer-hydration.mjs  post-build: ejecuta los scripts después de la primera pintura
@@ -61,9 +62,12 @@ tests/e2e/             pruebas de Playwright
 - **Todos los textos** del sitio están en [src/i18n/es.ts](src/i18n/es.ts), [src/i18n/pt.ts](src/i18n/pt.ts) y [src/i18n/en.ts](src/i18n/en.ts). No hay texto escrito directamente en los componentes.
 - `es.ts` es la base: `pt.ts` y `en.ts` tienen que tener exactamente las mismas claves. Si falta o sobra una, el build falla.
 - **Políticas legales:** en [src/i18n/legal/](src/i18n/legal/). Admiten `{email}`, `{version}` y `{date}`.
-- **Rutas por idioma:**
-  - Las anclas de las secciones (`/es/#servicios`, `/pt/#servicos`) están en `SECTION_IDS`, en [src/i18n/config.ts](src/i18n/config.ts).
-  - Las rutas legales (`/es/privacidad`, `/pt/privacidade`, `/en/privacy`) están en `LEGAL_SLUGS`, en el mismo archivo.
+- **Páginas y rutas por idioma** (todo en [src/i18n/config.ts](src/i18n/config.ts)):
+  - El inicio (`/es/`) muestra solo el logo animado y el contacto (`/es/#contacto`, ancla en `CONTACT_ID`).
+  - Cada opción del menú es una página: `/es/servicios/`, `/pt/servicos/`, `/en/services/`, etc. Los slugs están en `PAGE_SLUGS`, y qué páginas aparecen en el menú, en [src/lib/nav.ts](src/lib/nav.ts).
+  - La página de Servicios incluye también "Por qué ZAJUX". Todas terminan con una invitación a escribir.
+  - Las rutas legales (`/es/privacidad`, `/pt/privacidade`, `/en/privacy`) están en `LEGAL_SLUGS`.
+  - El selector de idioma lleva a la misma página en el otro idioma.
 - **Detección de idioma en `/`:**
   1. Si la persona ya eligió un idioma (guardado en `localStorage`), se respeta.
   2. Si no, se usa el primer idioma soportado de `navigator.languages`: `pt*` → `/pt`, `es*` → `/es`, `en*` → `/en`.
@@ -108,7 +112,17 @@ El ruteo se define en `CONTACT_PERSON`, en [src/i18n/config.ts](src/i18n/config.
 1. Agregar los proyectos (publicados **con permiso del cliente**) en [src/data/projects.ts](src/data/projects.ts), con su imagen en `public/projects/`.
 2. Poner `SHOW_PROJECTS = true`.
 
-La sección y su link en el menú aparecen solos.
+La página `/es/proyectos/` (y sus versiones en pt y en), su link en el menú y su entrada en el sitemap aparecen solos.
+
+## Diseño y animaciones
+
+- **Estilo:** fondo negro, tarjetas de 28 px sin bordes, barra de navegación flotante de vidrio y botones tipo píldora. Lima (`#C6F432`) para las acciones. Los colores están en `@theme`, en [src/app/globals.css](src/app/globals.css).
+- **Tipografía:** en equipos Apple se usa la fuente del sistema (SF Pro); en el resto, Inter (autoalojada).
+- **Logo del inicio** ([src/components/intro/HeroLogo.tsx](src/components/intro/HeroLogo.tsx)):
+  - Intro una vez por sesión: la X orbita alrededor de "ZAJU" con estela y anillo, y encaja con destello y onda.
+  - Después, la X vuelve a orbitar cada 5,5 s y al pasar el mouse. Se pausa si el logo no está a la vista.
+  - Los tiempos están en las constantes del principio del archivo.
+- **"Reducir movimiento":** las animaciones corren aunque el sistema lo pida (por ejemplo, Windows con los efectos de animación desactivados), porque son cortas y suaves. En ese caso solo se desactiva el scroll suave.
 
 ## Variables de entorno
 
