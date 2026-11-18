@@ -6,7 +6,6 @@ import { SectionObserver } from '@/components/layout/SectionObserver';
 import { MotionProvider } from '@/components/motion/MotionProvider';
 import { Hero } from '@/components/sections/Hero';
 import { Services } from '@/components/sections/Services';
-import { Demos } from '@/components/sections/Demos';
 import { Process } from '@/components/sections/Process';
 import { Why } from '@/components/sections/Why';
 import { Plans } from '@/components/sections/Plans';
@@ -33,7 +32,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <SectionObserver locale={locale} />
       <Hero locale={locale} t={t} />
       <Services locale={locale} t={t} index={1} />
-      <Demos locale={locale} t={t} index={2} />
       <Process locale={locale} t={t.process} index={3} />
       <Why locale={locale} t={t} index={4} />
       <Plans locale={locale} t={t} index={5} />

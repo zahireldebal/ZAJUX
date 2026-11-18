@@ -20,7 +20,6 @@ export const LOCALE_STORAGE_KEY = 'zajux:locale';
 /* ---------- Secciones de la one-page (ids localizados) ---------- */
 export const SECTION_KEYS = [
   'services',
-  'demos',
   'process',
   'why',
   'plans',
@@ -34,7 +33,6 @@ export type SectionKey = (typeof SECTION_KEYS)[number];
 export const SECTION_IDS: Record<Locale, Record<SectionKey, string>> = {
   es: {
     services: 'servicios',
-    demos: 'demos',
     process: 'proceso',
     why: 'por-que-zajux',
     plans: 'planes',
@@ -45,7 +43,6 @@ export const SECTION_IDS: Record<Locale, Record<SectionKey, string>> = {
   },
   pt: {
     services: 'servicos',
-    demos: 'demos',
     process: 'processo',
     why: 'por-que-zajux',
     plans: 'planos',
@@ -56,7 +53,6 @@ export const SECTION_IDS: Record<Locale, Record<SectionKey, string>> = {
   },
   en: {
     services: 'services',
-    demos: 'demos',
     process: 'process',
     why: 'why-zajux',
     plans: 'plans',

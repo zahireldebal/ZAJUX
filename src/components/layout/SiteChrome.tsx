@@ -10,8 +10,8 @@ import { FloatingCta } from '@/components/contact/FloatingCta';
 
 /** Secciones que aparecen en el menú (Proyectos solo si el portafolio está activo). */
 export function navSections(): SectionKey[] {
-  const base: SectionKey[] = ['services', 'demos', 'process', 'plans', 'about', 'faq'];
-  if (projectsVisible()) base.splice(5, 0, 'projects');
+  const base: SectionKey[] = ['services', 'process', 'plans', 'about', 'faq'];
+  if (projectsVisible()) base.splice(4, 0, 'projects');
   return base;
 }
 
