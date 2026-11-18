@@ -5,6 +5,7 @@ import { grotesk, mono } from '../fonts';
 import { HREFLANG, LOCALES, isLocale } from '@/i18n/config';
 import { buildMetadata } from '@/lib/seo';
 import { ContactProvider } from '@/components/contact/ContactProvider';
+import { Analytics } from '@/components/layout/Analytics';
 
 export const dynamicParams = false;
 
@@ -39,6 +40,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
       </head>
       <body id="top">
         <ContactProvider>{children}</ContactProvider>
+        <Analytics />
       </body>
     </html>
   );

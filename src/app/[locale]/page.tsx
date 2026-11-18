@@ -15,6 +15,7 @@ import { Projects } from '@/components/sections/Projects';
 import { Faq } from '@/components/sections/Faq';
 import { Contact } from '@/components/sections/Contact';
 import { projectsVisible } from '@/data/projects';
+import { organizationJsonLd } from '@/lib/jsonld';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -24,6 +25,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <SiteChrome locale={locale}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd(locale)).replace(/</g, '\\u003c') }}
+      />
       <MotionProvider />
       <SectionObserver locale={locale} />
       <Hero locale={locale} t={t} />
