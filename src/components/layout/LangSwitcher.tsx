@@ -1,71 +1,51 @@
 'use client';
 
-import {
-  LOCALES,
-  LOCALE_LABEL,
-  LOCALE_STORAGE_KEY,
-  SECTION_IDS,
-  homePath,
-  legalPath,
-  sectionKeyFromId,
-  type LegalKey,
-  type Locale,
-} from '@/i18n/config';
-import { getActiveSection } from '@/lib/activeSection';
+import { CONTACT_ID, LOCALES, LOCALE_LABEL, LOCALE_STORAGE_KEY, routePath, type Locale, type RouteKey } from '@/i18n/config';
 import { writeStorage } from '@/lib/storage';
 
 /**
- * Selector ES · PT · EN. Los enlaces funcionan sin JavaScript (van al inicio o a la
- * misma página legal); con JavaScript, además mantienen la sección visible y guardan
- * la elección.
+ * Selector ES · PT · EN. Cada enlace lleva a la misma página en el otro idioma
+ * (funciona sin JavaScript); con JavaScript, además guarda la elección y, si se
+ * estaba en el contacto del inicio, mantiene esa posición.
  */
 export function LangSwitcher({
   locale,
   label,
-  legalKey,
+  route,
   className = '',
   size = 'sm',
 }: {
   locale: Locale;
   label: string;
-  legalKey?: LegalKey;
+  route: RouteKey;
   className?: string;
   size?: 'sm' | 'lg';
 }) {
-  const hrefFor = (l: Locale) => (legalKey ? legalPath(l, legalKey) : homePath(l));
-
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>, l: Locale) => {
     writeStorage(LOCALE_STORAGE_KEY, l);
-    if (l === locale || legalKey) return;
+    if (l === locale || route !== 'home') return;
+    if (decodeURIComponent(window.location.hash.slice(1)) !== CONTACT_ID[locale]) return;
     e.preventDefault();
-    const fromHash = sectionKeyFromId(locale, decodeURIComponent(window.location.hash.slice(1)));
-    const key = getActiveSection() ?? fromHash;
-    const target = key ? `${homePath(l)}#${SECTION_IDS[l][key]}` : homePath(l);
-    window.location.assign(target);
+    window.location.assign(`${routePath(l, 'home')}#${CONTACT_ID[l]}`);
   };
 
   return (
     <nav aria-label={label} className={className}>
       <ul className="flex items-center">
-        {LOCALES.map((l, i) => (
-          <li key={l} className="flex items-center">
-            {i > 0 && (
-              <span aria-hidden="true" className="px-0.5 text-faint">
-                ·
-              </span>
-            )}
+        {LOCALES.map((l) => (
+          <li key={l}>
             <a
-              href={hrefFor(l)}
+              href={routePath(l, route)}
               hrefLang={l === 'pt' ? 'pt-BR' : l}
               lang={l === 'pt' ? 'pt-BR' : l}
               aria-current={l === locale ? 'true' : undefined}
               aria-label={`${l.toUpperCase()} — ${LOCALE_LABEL[l]}`}
               onClick={(e) => onClick(e, l)}
-              className={`label-mono inline-flex min-h-11 min-w-11 items-center justify-center rounded-md transition-colors duration-300 ${
-                size === 'lg' ? 'text-sm' : ''
-              } ${l === locale ? 'text-lime' : 'text-mute hover:text-paper'}`}
+              className={`caption inline-flex min-h-11 min-w-10 items-center justify-center rounded-full transition-colors duration-300 ${
+                size === 'lg' ? '!text-sm' : ''
+              } ${l === locale ? 'text-paper' : 'text-faint hover:text-paper'}`}
             >
-              {l.toUpperCase()}
+              <span className={`rounded-full px-2 py-1 ${l === locale ? 'bg-surface-2' : ''}`}>{l.toUpperCase()}</span>
             </a>
           </li>
         ))}
@@ -73,4 +53,3 @@ export function LangSwitcher({
     </nav>
   );
 }
-

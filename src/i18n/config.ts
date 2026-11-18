@@ -17,54 +17,21 @@ export const CONTACT_PERSON: Record<Locale, PersonId> = { es: 'juani', pt: 'zahi
 /** Clave en localStorage con el idioma elegido por la persona. */
 export const LOCALE_STORAGE_KEY = 'zajux:locale';
 
-/* ---------- Secciones de la one-page (ids localizados) ---------- */
-export const SECTION_KEYS = [
-  'services',
-  'process',
-  'why',
-  'plans',
-  'about',
-  'projects',
-  'faq',
-  'contact',
-] as const;
-export type SectionKey = (typeof SECTION_KEYS)[number];
+/* ---------- Páginas de contenido (slugs localizados) ---------- */
+export const PAGE_KEYS = ['services', 'process', 'plans', 'about', 'projects', 'faq'] as const;
+export type PageKey = (typeof PAGE_KEYS)[number];
 
-export const SECTION_IDS: Record<Locale, Record<SectionKey, string>> = {
-  es: {
-    services: 'servicios',
-    process: 'proceso',
-    why: 'por-que-zajux',
-    plans: 'planes',
-    about: 'nosotros',
-    projects: 'proyectos',
-    faq: 'preguntas',
-    contact: 'contacto',
-  },
-  pt: {
-    services: 'servicos',
-    process: 'processo',
-    why: 'por-que-zajux',
-    plans: 'planos',
-    about: 'sobre-nos',
-    projects: 'projetos',
-    faq: 'perguntas',
-    contact: 'contato',
-  },
-  en: {
-    services: 'services',
-    process: 'process',
-    why: 'why-zajux',
-    plans: 'plans',
-    about: 'about',
-    projects: 'projects',
-    faq: 'faq',
-    contact: 'contact',
-  },
+export const PAGE_SLUGS: Record<Locale, Record<PageKey, string>> = {
+  es: { services: 'servicios', process: 'proceso', plans: 'planes', about: 'nosotros', projects: 'proyectos', faq: 'preguntas' },
+  pt: { services: 'servicos', process: 'processo', plans: 'planos', about: 'sobre-nos', projects: 'projetos', faq: 'perguntas' },
+  en: { services: 'services', process: 'process', plans: 'plans', about: 'about', projects: 'projects', faq: 'faq' },
 };
 
-export const sectionKeyFromId = (locale: Locale, id: string): SectionKey | undefined =>
-  SECTION_KEYS.find((k) => SECTION_IDS[locale][k] === id);
+export const pageKeyFromSlug = (locale: Locale, slug: string): PageKey | undefined =>
+  PAGE_KEYS.find((k) => PAGE_SLUGS[locale][k] === slug);
+
+/** Ancla de la sección de contacto en la página de inicio. */
+export const CONTACT_ID: Record<Locale, string> = { es: 'contacto', pt: 'contato', en: 'contact' };
 
 /* ---------- Páginas legales (slugs localizados) ---------- */
 export const LEGAL_KEYS = ['privacy', 'cookies', 'terms'] as const;
@@ -80,6 +47,16 @@ export const legalKeyFromSlug = (locale: Locale, slug: string): LegalKey | undef
   LEGAL_KEYS.find((k) => LEGAL_SLUGS[locale][k] === slug);
 
 /* ---------- Helpers de rutas ---------- */
+/** Cualquier página del sitio: inicio, página de contenido o página legal. */
+export type RouteKey = 'home' | PageKey | LegalKey;
+
+export const isLegalKey = (r: RouteKey): r is LegalKey => (LEGAL_KEYS as readonly string[]).includes(r);
+export const isPageKey = (r: RouteKey): r is PageKey => (PAGE_KEYS as readonly string[]).includes(r);
+
 export const homePath = (locale: Locale) => `/${locale}/`;
-export const sectionHref = (locale: Locale, key: SectionKey) => `/${locale}/#${SECTION_IDS[locale][key]}`;
+export const pagePath = (locale: Locale, key: PageKey) => `/${locale}/${PAGE_SLUGS[locale][key]}/`;
 export const legalPath = (locale: Locale, key: LegalKey) => `/${locale}/${LEGAL_SLUGS[locale][key]}/`;
+export const contactHref = (locale: Locale) => `/${locale}/#${CONTACT_ID[locale]}`;
+
+export const routePath = (locale: Locale, r: RouteKey) =>
+  r === 'home' ? homePath(locale) : isLegalKey(r) ? legalPath(locale, r) : pagePath(locale, r);

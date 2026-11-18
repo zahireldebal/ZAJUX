@@ -21,15 +21,15 @@ async function gotoReady(page: Page, path: string) {
 const opened = (page: Page) => page.evaluate(() => (window as unknown as { __opened: string[] }).__opened);
 
 const cases = [
-  { locale: 'es', number: '59892754708', greeting: 'Hola, soy *Ana*', plan: 'Consultar', review: 'Revisar mensaje', wa: 'Contactar por WhatsApp', country: 'Uruguay' },
-  { locale: 'pt', number: '5592984823591', greeting: 'Olá, sou *Ana*', plan: 'Consultar', review: 'Revisar mensagem', wa: 'Chamar no WhatsApp', country: 'Uruguai' },
-  { locale: 'en', number: '5592984823591', greeting: "Hi, I'm *Ana*", plan: 'Ask about it', review: 'Review message', wa: 'Contact via WhatsApp', country: 'Uruguay' },
+  { locale: 'es', plans: 'planes', number: '59892754708', greeting: 'Hola, soy *Ana*', plan: 'Consultar', review: 'Revisar mensaje', wa: 'Contactar por WhatsApp', country: 'Uruguay' },
+  { locale: 'pt', plans: 'planos', number: '5592984823591', greeting: 'Olá, sou *Ana*', plan: 'Consultar', review: 'Revisar mensagem', wa: 'Chamar no WhatsApp', country: 'Uruguai' },
+  { locale: 'en', plans: 'plans', number: '5592984823591', greeting: "Hi, I'm *Ana*", plan: 'Ask about it', review: 'Review message', wa: 'Contact via WhatsApp', country: 'Uruguay' },
 ] as const;
 
 for (const c of cases) {
   test(`${c.locale}: Planes → modal con plan precargado → WhatsApp correcto`, async ({ page }) => {
     await setup(page);
-    await gotoReady(page, `/${c.locale}/`);
+    await gotoReady(page, `/${c.locale}/${c.plans}/`);
 
     // "Consultar" del segundo plan abre el modal con ese plan
     const planButtons = page.locator('section a[aria-haspopup="dialog"]', { hasText: c.plan });

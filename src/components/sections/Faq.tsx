@@ -1,20 +1,19 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { SECTION_IDS, type Locale } from '@/i18n/config';
+import { SectionHeading, sectionClass } from '@/components/ui/SectionHeading';
 import type { Dictionary } from '@/i18n';
 
 /** Acordeón accesible (botón + región). La altura se anima con grid-template-rows. */
-export function Faq({ locale, t, index }: { locale: Locale; t: Dictionary['faq']; index: number }) {
+export function Faq({ t, level = 2 }: { t: Dictionary['faq']; level?: 1 | 2 }) {
   const [open, setOpen] = useState<number | null>(0);
   const base = useId();
   return (
-    <section id={SECTION_IDS[locale].faq} aria-labelledby="faq-title" className="section-y relative" tabIndex={-1}>
+    <section aria-labelledby="faq-title" className={sectionClass(level)}>
       <div className="container-x grid gap-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            <SectionHeading index={index} eyebrow={t.eyebrow} title={t.title} id="faq-title" align="stack" />
+            <SectionHeading eyebrow={t.eyebrow} title={t.title} id="faq-title" level={level} align="stack" />
           </div>
         </div>
         <ul className="border-t border-line lg:col-span-8" data-reveal-group>
@@ -33,11 +32,8 @@ export function Faq({ locale, t, index }: { locale: Locale; t: Dictionary['faq']
                     onClick={() => setOpen(isOpen ? null : i)}
                     className="group flex min-h-16 w-full items-center justify-between gap-6 py-5 text-left text-[1.0625rem] font-medium sm:text-lg"
                   >
-                    <span className="flex gap-4">
-                      <span className="label-mono mt-1 text-faint">{String(i + 1).padStart(2, '0')}</span>
-                      <span className={`transition-colors duration-300 ${isOpen ? 'text-paper' : 'text-paper/85 group-hover:text-paper'}`}>
-                        {item.q}
-                      </span>
+                    <span className={`transition-colors duration-300 ${isOpen ? 'text-paper' : 'text-paper/85 group-hover:text-paper'}`}>
+                      {item.q}
                     </span>
                     <span
                       aria-hidden="true"
@@ -61,7 +57,7 @@ export function Faq({ locale, t, index }: { locale: Locale; t: Dictionary['faq']
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <p className="max-w-2xl pb-6 pl-9 text-mute sm:pl-10">{item.a}</p>
+                    <p className="max-w-2xl pb-6 text-mute">{item.a}</p>
                   </div>
                 </div>
               </li>

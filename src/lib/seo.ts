@@ -1,32 +1,31 @@
 import type { Metadata } from 'next';
-import { HREFLANG, LOCALES, OG_LOCALE, homePath, legalPath, type LegalKey, type Locale } from '@/i18n/config';
+import { HREFLANG, LOCALES, OG_LOCALE, routePath, type Locale, type RouteKey } from '@/i18n/config';
 import { getDictionary } from '@/i18n';
 import { SITE_URL } from '@/data/business';
 
-/** Ruta de una página (inicio o legal) en un idioma. */
-export const pagePath = (locale: Locale, legalKey?: LegalKey) => (legalKey ? legalPath(locale, legalKey) : homePath(locale));
-
 /** Alternates hreflang (es, pt-BR, en, x-default) para una página. */
-export function hreflangAlternates(legalKey?: LegalKey) {
+export function hreflangAlternates(route: RouteKey = 'home') {
   const languages: Record<string, string> = {};
-  for (const l of LOCALES) languages[HREFLANG[l]] = `${SITE_URL}${pagePath(l, legalKey)}`;
-  languages['x-default'] = legalKey ? `${SITE_URL}${pagePath('en', legalKey)}` : `${SITE_URL}/`;
+  for (const l of LOCALES) languages[HREFLANG[l]] = `${SITE_URL}${routePath(l, route)}`;
+  // En el inicio, x-default es la raíz (detecta el idioma); en el resto, la versión en inglés.
+  languages['x-default'] = route === 'home' ? `${SITE_URL}/` : `${SITE_URL}${routePath('en', route)}`;
   return languages;
 }
 
-export function buildMetadata(locale: Locale, opts: { legalKey?: LegalKey; title?: string; description?: string } = {}): Metadata {
+export function buildMetadata(locale: Locale, opts: { route?: RouteKey; title?: string; description?: string } = {}): Metadata {
   const d = getDictionary(locale);
+  const route = opts.route ?? 'home';
   const title = opts.title ? `${opts.title} · ZAJUX` : d.meta.title;
   const description = opts.description ?? d.meta.description;
-  const url = `${SITE_URL}${pagePath(locale, opts.legalKey)}`;
+  const url = `${SITE_URL}${routePath(locale, route)}`;
   return {
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    keywords: opts.legalKey ? undefined : d.meta.keywords,
+    keywords: route === 'home' ? d.meta.keywords : undefined,
     authors: [{ name: 'Juani Hermelo' }, { name: 'Zahir El Debal' }],
     creator: 'ZAJUX',
-    alternates: { canonical: url, languages: hreflangAlternates(opts.legalKey) },
+    alternates: { canonical: url, languages: hreflangAlternates(route) },
     openGraph: {
       type: 'website',
       siteName: 'ZAJUX',

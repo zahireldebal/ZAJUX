@@ -1,26 +1,28 @@
 import type { ReactNode } from 'react';
 
 /**
- * Encabezado de sección: numeración tipo "01 /", título que se revela por líneas
- * e introducción. En desktop, título a la izquierda e intro a la derecha.
+ * Encabezado de sección: etiqueta lima, título que se revela por líneas e introducción.
+ * En la primera sección de una página el título es h1; en las demás, h2.
+ * En desktop ("split"), título a la izquierda e intro a la derecha.
  */
 export function SectionHeading({
-  index,
   eyebrow,
   title,
   intro,
   id,
+  level = 2,
   align = 'split',
   children,
 }: {
-  index: number;
   eyebrow: string;
   title: string;
   intro?: string;
   id: string;
+  level?: 1 | 2;
   align?: 'split' | 'stack';
   children?: ReactNode;
 }) {
+  const Title = level === 1 ? 'h1' : 'h2';
   return (
     <header
       className={
@@ -30,14 +32,12 @@ export function SectionHeading({
       }
     >
       <div className={align === 'split' ? 'lg:col-span-7' : ''}>
-        <p className="label-mono flex items-center gap-3 text-mute" data-reveal>
-          <span className="text-lime">{String(index).padStart(2, '0')} /</span>
+        <p className="eyebrow" data-reveal>
           {eyebrow}
-          <span aria-hidden="true" className="h-px w-10 bg-line-strong" />
         </p>
-        <h2 id={id} className="mt-5 text-h2 font-semibold" data-split>
+        <Title id={id} className={`mt-4 font-semibold ${level === 1 ? 'text-h1' : 'text-h2'}`} data-split>
           {title}
-        </h2>
+        </Title>
       </div>
       {(intro || children) && (
         <div className={align === 'split' ? 'lg:col-span-5 lg:pb-2' : ''} data-reveal>
@@ -48,3 +48,6 @@ export function SectionHeading({
     </header>
   );
 }
+
+/** Espaciado de una sección: la primera de cada página deja lugar para la barra de navegación. */
+export const sectionClass = (level: 1 | 2) => `${level === 1 ? 'section-first' : 'section-y'} relative`;

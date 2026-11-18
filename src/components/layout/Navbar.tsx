@@ -5,23 +5,25 @@ import { NavLogo } from '@/components/brand/NavLogo';
 import { ContactButton } from '@/components/contact/ContactButton';
 import { LangSwitcher } from './LangSwitcher';
 import { MobileMenu } from './MobileMenu';
-import { useActiveSection } from '@/lib/activeSection';
-import { homePath, sectionHref, type LegalKey, type Locale, type SectionKey } from '@/i18n/config';
+import { contactHref, homePath, pagePath, type Locale, type PageKey, type RouteKey } from '@/i18n/config';
 import type { Dictionary } from '@/i18n';
 
 export interface NavProps {
   locale: Locale;
   nav: Dictionary['nav'];
   common: Pick<Dictionary['common'], 'openMenu' | 'closeMenu' | 'language' | 'home'>;
-  links: SectionKey[];
-  legalKey?: LegalKey;
+  links: PageKey[];
+  route: RouteKey;
 }
 
-export function Navbar({ locale, nav, common, links, legalKey }: NavProps) {
+/**
+ * Barra flotante con vidrio esmerilado: cada opción abre su página.
+ * Se esconde al bajar y vuelve al subir.
+ */
+export function Navbar({ locale, nav, common, links, route }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const active = useActiveSection();
   const lastY = useRef(0);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
@@ -52,54 +54,61 @@ export function Navbar({ locale, nav, common, links, legalKey }: NavProps) {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-700 ease-[var(--ease-out-expo)] ${
-          showBar ? 'translate-y-0' : '-translate-y-full'
-        } ${scrolled && !menuOpen ? 'border-b border-line bg-ink/80 backdrop-blur-md' : 'border-b border-transparent'}`}
+        className={`fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-transform duration-700 ease-[var(--ease-out-expo)] sm:px-4 ${
+          showBar ? 'translate-y-0' : '-translate-y-[120%]'
+        }`}
       >
-        <div className="container-x flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
+        <div
+          className={`nav-glass mx-auto flex h-14 max-w-[78rem] items-center justify-between gap-4 rounded-[1.25rem] pl-4 pr-2 transition-[background-color,box-shadow] duration-500 sm:pl-5 ${
+            scrolled || menuOpen ? 'nav-glass--solid' : ''
+          }`}
+        >
           <NavLogo href={homePath(locale)} label={common.home} />
 
           <nav aria-label={nav.label} className="hidden lg:block">
-            <ul className="flex items-center gap-7 xl:gap-9">
+            <ul className="flex items-center gap-1">
               {links.map((k) => (
                 <li key={k}>
                   <a
-                    href={legalKey ? sectionHref(locale, k) : sectionHref(locale, k).replace(homePath(locale), '')}
-                    aria-current={active === k ? 'true' : undefined}
-                    className={`link-grow inline-flex min-h-11 items-center text-[0.95rem] transition-colors duration-300 ${
-                      active === k ? 'text-paper' : 'text-mute hover:text-paper'
-                    }`}
+                    href={pagePath(locale, k)}
+                    aria-current={route === k ? 'page' : undefined}
+                    className={`nav-link ${route === k ? 'nav-link--active' : ''}`}
                   >
                     {nav.links[k]}
                   </a>
                 </li>
               ))}
+              <li>
+                <a href={contactHref(locale)} className="nav-link">
+                  {nav.links.contact}
+                </a>
+              </li>
             </ul>
           </nav>
 
-          <div className="flex items-center gap-1 sm:gap-3">
-            <LangSwitcher locale={locale} label={common.language} legalKey={legalKey} />
-            <ContactButton href={sectionHref(locale, 'contact')} className="btn btn-primary hidden !min-h-11 !px-5 !text-sm md:inline-flex">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <LangSwitcher locale={locale} label={common.language} route={route} />
+            <ContactButton href={contactHref(locale)} className="btn btn-primary hidden !min-h-10 !px-4 !text-[0.8125rem] md:inline-flex">
               {nav.cta}
             </ContactButton>
             <button
               type="button"
-              className="-mr-2 inline-flex size-11 items-center justify-center rounded-lg lg:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-full lg:hidden"
               aria-expanded={menuOpen}
               id="menu-toggle"
               aria-controls="mobile-menu"
               aria-label={menuOpen ? common.closeMenu : common.openMenu}
               onClick={() => setMenuOpen((v) => !v)}
             >
-              <span className="relative block h-3 w-6" aria-hidden="true">
+              <span className="relative block h-3 w-5" aria-hidden="true">
                 <span
-                  className={`absolute left-0 top-0 h-[1.5px] w-6 bg-paper transition-transform duration-500 ease-[var(--ease-out-expo)] ${
+                  className={`absolute left-0 top-0 h-[1.5px] w-5 rounded-full bg-paper transition-transform duration-500 ease-[var(--ease-out-expo)] ${
                     menuOpen ? 'translate-y-[5.25px] rotate-45' : ''
                   }`}
                 />
                 <span
-                  className={`absolute bottom-0 left-0 h-[1.5px] bg-paper transition-[transform,width] duration-500 ease-[var(--ease-out-expo)] ${
-                    menuOpen ? 'w-6 -translate-y-[5.25px] -rotate-45' : 'w-4'
+                  className={`absolute bottom-0 left-0 h-[1.5px] rounded-full bg-paper transition-[transform,width] duration-500 ease-[var(--ease-out-expo)] ${
+                    menuOpen ? 'w-5 -translate-y-[5.25px] -rotate-45' : 'w-3.5'
                   }`}
                 />
               </span>
@@ -108,15 +117,7 @@ export function Navbar({ locale, nav, common, links, legalKey }: NavProps) {
         </div>
       </header>
 
-      <MobileMenu
-        open={menuOpen}
-        onClose={closeMenu}
-        locale={locale}
-        nav={nav}
-        languageLabel={common.language}
-        links={links}
-        legalKey={legalKey}
-      />
+      <MobileMenu open={menuOpen} onClose={closeMenu} locale={locale} nav={nav} languageLabel={common.language} links={links} route={route} />
     </>
   );
 }

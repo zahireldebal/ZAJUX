@@ -10,6 +10,14 @@ const pt: Dictionary = {
       'criação de sites Manaus, sites para pequenas empresas, desenvolvimento web Manaus, site profissional, sistema de agendamento online, loja virtual, landing page',
     ogAlt: 'ZAJUX — Sites que fazem o seu negócio crescer',
     serviceDescription: 'Design e desenvolvimento web sob medida para pequenas e médias empresas do Brasil, do Uruguai e do mundo.',
+    pages: {
+      services: 'Sites, reservas online, lojas, apps, sistemas de gestão, automações, SEO local e manutenção. Design e desenvolvimento sob medida do Brasil e do Uruguai.',
+      process: 'Como trabalhamos: consulta, proposta, design e desenvolvimento, publicação e suporte. Um processo claro e sem rodeios.',
+      plans: 'Planos de design e desenvolvimento web: site institucional, site com reservas, apps e sistemas sob medida e manutenção mensal.',
+      about: 'Somos Juani Hermelo (Maldonado, Uruguai) e Zahir El Debal (Manaus, Brasil). Desenhamos e programamos cada projeto nós mesmos.',
+      projects: 'Trabalhos publicados pela ZAJUX, com autorização de cada cliente.',
+      faq: 'Prazos, pagamento, domínio, alterações e mais: as perguntas mais frequentes sobre um site novo.',
+    },
   },
   common: {
     skipToContent: 'Pular para o conteúdo',
@@ -28,7 +36,6 @@ const pt: Dictionary = {
     links: {
       services: 'Serviços',
       process: 'Processo',
-      why: 'Por que a ZAJUX',
       plans: 'Planos',
       about: 'Sobre nós',
       projects: 'Projetos',
@@ -40,12 +47,8 @@ const pt: Dictionary = {
   hero: {
     eyebrow: 'Estúdio de design e desenvolvimento web',
     title: 'Sites que fazem o seu negócio crescer.',
-    subtitle:
-      'Criação de sites no Brasil e no Uruguai. Sites rápidos, agendamento online, lojas e sistemas sob medida para o seu cliente te encontrar, te escolher e te chamar.',
     ctaPrimary: 'Fale do seu projeto',
     ctaSecondary: 'Ver serviços',
-    badges: ['Manaus · Brasil', 'Maldonado · Uruguai', 'Português · Español · English'],
-    scroll: 'Role para ver mais',
   },
   services: {
     eyebrow: 'Serviços',
@@ -330,6 +333,10 @@ const pt: Dictionary = {
       consent: 'Consentimento',
       consentValue: 'Aceitou a Política de Privacidade {version}',
     },
+  },
+  pageCta: {
+    title: 'Tem um projeto em mente?',
+    text: 'Conte o que você precisa e respondemos pessoalmente, pelo WhatsApp ou por e-mail.',
   },
   floating: { cta: 'Fale do seu projeto' },
   footer: {

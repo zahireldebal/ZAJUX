@@ -8,6 +8,14 @@ const es = {
       'diseño web Maldonado, desarrollo web Uruguay, diseño de páginas web Punta del Este, sitios web para negocios, sistema de reservas online, tienda online Uruguay, landing page',
     ogAlt: 'ZAJUX — Webs que hacen crecer tu negocio',
     serviceDescription: 'Diseño y desarrollo web a medida para pequeños y medianos negocios de Uruguay, Brasil y el resto del mundo.',
+    pages: {
+      services: 'Sitios web, reservas online, tiendas, apps, sistemas de gestión, automatizaciones, SEO local y mantenimiento. Diseño y desarrollo a medida desde Uruguay y Brasil.',
+      process: 'Cómo trabajamos: consulta, propuesta, diseño y desarrollo, publicación y soporte. Un proceso claro, sin vueltas.',
+      plans: 'Planes de diseño y desarrollo web: web de marca, web con reservas, apps y sistemas a medida, y mantenimiento mensual.',
+      about: 'Somos Juani Hermelo (Maldonado, Uruguay) y Zahir El Debal (Manaus, Brasil). Diseñamos y programamos cada proyecto nosotros mismos.',
+      projects: 'Trabajos publicados por ZAJUX, con permiso de cada cliente.',
+      faq: 'Plazos, pagos, dominio, cambios y más: las preguntas que más nos hacen sobre una web nueva.',
+    },
   },
   common: {
     skipToContent: 'Saltar al contenido',
@@ -26,7 +34,6 @@ const es = {
     links: {
       services: 'Servicios',
       process: 'Proceso',
-      why: 'Por qué ZAJUX',
       plans: 'Planes',
       about: 'Nosotros',
       projects: 'Proyectos',
@@ -38,12 +45,8 @@ const es = {
   hero: {
     eyebrow: 'Estudio de diseño y desarrollo web',
     title: 'Webs que hacen crecer tu negocio.',
-    subtitle:
-      'Diseño y desarrollo web en Uruguay y Brasil. Sitios rápidos, reservas online, tiendas y sistemas a medida para que te encuentren, te elijan y te escriban.',
     ctaPrimary: 'Contanos tu proyecto',
     ctaSecondary: 'Ver servicios',
-    badges: ['Maldonado · Uruguay', 'Manaus · Brasil', 'Español · Português · English'],
-    scroll: 'Bajá para ver más',
   },
   services: {
     eyebrow: 'Servicios',
@@ -328,6 +331,10 @@ const es = {
       consent: 'Consentimiento',
       consentValue: 'Aceptó la Política de Privacidad {version}',
     },
+  },
+  pageCta: {
+    title: '¿Tenés un proyecto en mente?',
+    text: 'Contanos qué necesitás y te respondemos personalmente, por WhatsApp o por email.',
   },
   floating: { cta: 'Contanos tu proyecto' },
   footer: {

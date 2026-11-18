@@ -10,6 +10,14 @@ const en: Dictionary = {
       'web design studio, small business website, web development Uruguay, web design Brazil, online booking system, custom web app, landing page design',
     ogAlt: 'ZAJUX — Websites that grow your business',
     serviceDescription: 'Custom web design and development for small and medium businesses in Uruguay, Brazil and worldwide.',
+    pages: {
+      services: 'Websites, online booking, stores, apps, management systems, automations, local SEO and maintenance. Custom design and development from Uruguay and Brazil.',
+      process: 'How we work: consultation, proposal, design and development, launch and support. A clear process, no runaround.',
+      plans: 'Web design and development plans: brand website, website with booking, custom apps and systems, and monthly maintenance.',
+      about: 'We are Juani Hermelo (Maldonado, Uruguay) and Zahir El Debal (Manaus, Brazil). We design and build every project ourselves.',
+      projects: 'Work published by ZAJUX, with each client’s permission.',
+      faq: 'Timelines, payment, domain, changes and more: the questions we get asked most about a new website.',
+    },
   },
   common: {
     skipToContent: 'Skip to content',
@@ -28,7 +36,6 @@ const en: Dictionary = {
     links: {
       services: 'Services',
       process: 'Process',
-      why: 'Why ZAJUX',
       plans: 'Plans',
       about: 'About',
       projects: 'Projects',
@@ -40,12 +47,8 @@ const en: Dictionary = {
   hero: {
     eyebrow: 'Web design & development studio',
     title: 'Websites that grow your business.',
-    subtitle:
-      'Web design and development from Uruguay and Brazil. Fast websites, online booking, stores and custom systems that help customers find you, choose you and get in touch.',
     ctaPrimary: 'Tell us about your project',
     ctaSecondary: 'See services',
-    badges: ['Maldonado · Uruguay', 'Manaus · Brazil', 'English · Español · Português'],
-    scroll: 'Scroll to see more',
   },
   services: {
     eyebrow: 'Services',
@@ -330,6 +333,10 @@ const en: Dictionary = {
       consent: 'Consent',
       consentValue: 'Accepted Privacy Policy {version}',
     },
+  },
+  pageCta: {
+    title: 'Have a project in mind?',
+    text: 'Tell us what you need and we’ll reply personally, on WhatsApp or by email.',
   },
   floating: { cta: 'Tell us about your project' },
   footer: {

@@ -1,20 +1,20 @@
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { SectionHeading, sectionClass } from '@/components/ui/SectionHeading';
 import { Arrow } from '@/components/ui/Arrow';
 import { PROJECTS, projectsVisible } from '@/data/projects';
-import { SECTION_IDS, type Locale } from '@/i18n/config';
+import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n';
 
 /** Portafolio. No se renderiza mientras SHOW_PROJECTS sea false o la lista esté vacía. */
-export function Projects({ locale, t, index }: { locale: Locale; t: Dictionary; index: number }) {
+export function Projects({ locale, t, level = 2 }: { locale: Locale; t: Dictionary; level?: 1 | 2 }) {
   if (!projectsVisible()) return null;
   const p = t.projects;
   return (
-    <section id={SECTION_IDS[locale].projects} aria-labelledby="projects-title" className="section-y relative" tabIndex={-1}>
+    <section aria-labelledby="projects-title" className={sectionClass(level)}>
       <div className="container-x">
-        <SectionHeading index={index} eyebrow={p.eyebrow} title={p.title} intro={p.intro} id="projects-title" />
+        <SectionHeading eyebrow={p.eyebrow} title={p.title} intro={p.intro} id="projects-title" level={level} />
         <ul className="mt-14 grid gap-4 md:grid-cols-2 lg:mt-20" data-reveal-group>
           {PROJECTS.map((pr) => (
-            <li key={pr.id} data-reveal-item className="card card-hover group overflow-hidden">
+            <li key={pr.id} data-reveal-item className="tile tile-hover group overflow-hidden">
               <a href={pr.url} target="_blank" rel="noopener noreferrer" className="block">
                 <div className="aspect-[16/10] overflow-hidden bg-surface">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -28,13 +28,13 @@ export function Projects({ locale, t, index }: { locale: Locale; t: Dictionary; 
                 </div>
                 <div className="flex items-end justify-between gap-4 p-6">
                   <div>
-                    <h3 className="text-h3 font-medium">{pr.name}</h3>
+                    <h3 className="text-h3 font-semibold">{pr.name}</h3>
                     <p className="mt-2 text-mute">{pr.description[locale]}</p>
-                    <p className="label-mono mt-3 text-[0.68rem] text-faint">
+                    <p className="caption mt-3 text-faint">
                       {pr.year} · {pr.tags.join(' · ')}
                     </p>
                   </div>
-                  <span className="label-mono inline-flex items-center gap-2 text-lime">
+                  <span className="caption inline-flex items-center gap-2 text-lime">
                     {p.visit}
                     <Arrow />
                   </span>

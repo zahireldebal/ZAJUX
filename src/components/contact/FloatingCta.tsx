@@ -3,18 +3,18 @@
 import { useEffect, useState } from 'react';
 import { ContactButton } from './ContactButton';
 import { useContact } from './ContactProvider';
-import { SECTION_IDS, sectionHref, type Locale } from '@/i18n/config';
+import { CONTACT_ID, contactHref, type Locale } from '@/i18n/config';
 
 /**
  * Botón flotante "Contanos tu proyecto": abre el formulario (no WhatsApp directo).
- * Aparece después del hero y se esconde cuando la sección de contacto o el footer están a la vista.
+ * Aparece al bajar una pantalla y se esconde cuando la sección de contacto o el footer están a la vista.
  */
 export function FloatingCta({ locale, label }: { locale: Locale; label: string }) {
   const [show, setShow] = useState(false);
   const { isOpen } = useContact();
 
   useEffect(() => {
-    const contact = document.getElementById(SECTION_IDS[locale].contact);
+    const contact = document.getElementById(CONTACT_ID[locale]);
     const footer = document.querySelector('footer');
     let pastHero = false;
     let blocked = false;
@@ -58,9 +58,9 @@ export function FloatingCta({ locale, label }: { locale: Locale; label: string }
       }`}
       inert={!visibleNow}
     >
-      <ContactButton href={sectionHref(locale, 'contact')} className="btn btn-primary shadow-[0_10px_40px_-10px_rgb(198_244_50/0.45)]">
+      <ContactButton href={contactHref(locale)} className="btn btn-primary shadow-[0_10px_40px_-10px_rgb(198_244_50/0.45)]">
         <span aria-hidden="true" className="relative flex size-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink/50 motion-reduce:hidden" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink/50" />
           <span className="relative inline-flex size-2 rounded-full bg-ink" />
         </span>
         {label}

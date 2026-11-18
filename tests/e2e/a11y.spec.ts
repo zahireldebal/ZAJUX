@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-for (const path of ['/es/', '/pt/', '/en/', '/es/privacidad/', '/pt/cookies/', '/en/terms/']) {
+for (const path of ['/es/', '/pt/', '/en/', '/es/servicios/', '/pt/processo/', '/en/plans/', '/es/nosotros/', '/pt/perguntas/', '/es/privacidad/', '/pt/cookies/', '/en/terms/']) {
   test(`accesibilidad (axe, WCAG AA): ${path}`, async ({ page }) => {
     await page.addInitScript(() => sessionStorage.setItem('zajux:intro', '1'));
     await page.goto(path);
