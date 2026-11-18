@@ -28,6 +28,8 @@ export interface OrbitFrame {
   opacity: number;
   /** Opacidad de la copia desenfocada (0 = nítida). */
   blur: number;
+  /** Inclinación en grados: la X se "inclina" en las curvas, como si tomara velocidad. */
+  rot: number;
   front: boolean;
 }
 
@@ -57,6 +59,7 @@ export function geometryFor(
 const SCALE_BACK = 0.62;
 const SCALE_FRONT = 1.22;
 const OPACITY_BACK = 0.42;
+const BANK_DEG = 12;
 
 export const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 export const smoothstep = (a: number, b: number, v: number) => {
@@ -91,6 +94,7 @@ export function orbitFrame(theta: number, g: OrbitGeometry, settle: number, rest
     scale: lerp(orbitScale, restScale, settle),
     opacity: lerp(orbitOpacity, 1, settle),
     blur: lerp(orbitBlur, 0, settle),
+    rot: (1 - settle) * Math.cos(theta) * BANK_DEG,
     front: settle > 0.5 || p.depth >= 0,
   };
 }
@@ -105,7 +109,17 @@ export const INTRO_PATH = {
   settleStart: 0.68,
 };
 
-/** Navbar (hover): sale de su lugar, da una vuelta corta y vuelve. */
+/** Puntos de la elipse en píxeles relativos a la X encajada (para dibujar el anillo). */
+export function orbitPolyline(g: OrbitGeometry, from: number, to: number, steps = 48) {
+  const pts: string[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const p = orbitPoint(from + ((to - from) * i) / steps, g);
+    pts.push(`${p.x.toFixed(1)},${p.y.toFixed(1)}`);
+  }
+  return pts.join(' ');
+}
+
+/** Navbar (hover) y vueltas del hero: sale de su lugar, da una vuelta y vuelve. */
 export const HOVER_PATH = {
   from: 0,
   to: Math.PI * 2,

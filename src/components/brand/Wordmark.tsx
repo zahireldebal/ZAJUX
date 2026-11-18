@@ -1,4 +1,4 @@
-import type { Ref } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { WORDMARK, X_BOX } from './logo-data';
 
 const ZAJU = WORDMARK.letters.slice(0, 4);
@@ -12,6 +12,9 @@ export interface WordmarkRefs {
   xSharp?: Ref<SVGSVGElement>;
   xBlur?: Ref<SVGSVGElement>;
   flash?: Ref<HTMLSpanElement>;
+  shock?: Ref<HTMLSpanElement>;
+  /** Recibe cada copia de la estela (en orden: la más cercana primero). */
+  ghost?: (i: number, el: HTMLSpanElement | null) => void;
 }
 
 /**
@@ -24,11 +27,19 @@ export function Wordmark({
   refs,
   idPrefix = 'wm',
   flash = false,
+  ghosts = 0,
+  back,
+  front,
 }: {
   className?: string;
   refs?: WordmarkRefs;
   idPrefix?: string;
   flash?: boolean;
+  /** Cantidad de copias de la estela (solo el logo grande del hero). */
+  ghosts?: number;
+  /** Capas extra detrás y delante de las letras (por ejemplo, las dos mitades del anillo). */
+  back?: ReactNode;
+  front?: ReactNode;
 }) {
   const { width: W, height: H } = WORDMARK;
   const xBox = {
@@ -39,6 +50,7 @@ export function Wordmark({
   };
   const xView = `${X_BOX.x - PAD} ${X_BOX.y - PAD} ${X_BOX.w + PAD * 2} ${X_BOX.h + PAD * 2}`;
   const filterId = `${idPrefix}-xblur`;
+  const xStyle = { left: `${xBox.left}%`, top: `${xBox.top}%`, width: `${xBox.width}%`, height: `${xBox.height}%` };
 
   return (
     <span
@@ -47,6 +59,21 @@ export function Wordmark({
       style={{ aspectRatio: `${W} / ${H}` }}
       aria-hidden="true"
     >
+      {back}
+
+      {Array.from({ length: ghosts }, (_, i) => (
+        <span
+          key={i}
+          ref={(el) => refs?.ghost?.(i, el)}
+          className="wordmark-ghost pointer-events-none absolute z-[1] block opacity-0"
+          style={xStyle}
+        >
+          <svg viewBox={xView} className="absolute inset-0 h-full w-full" focusable="false">
+            <path d={X.d} fill="#C6F432" />
+          </svg>
+        </span>
+      ))}
+
       <svg
         ref={refs?.letters}
         viewBox={`0 0 ${W} ${H}`}
@@ -54,15 +81,19 @@ export function Wordmark({
         focusable="false"
       >
         {ZAJU.map((l) => (
-          <path key={l.char} d={l.d} fill="#F5F4F0" data-letter={l.char} />
+          <path key={l.char} d={l.d} fill="#F5F5F7" data-letter={l.char} />
         ))}
       </svg>
 
-      <span
-        ref={refs?.x}
-        className="wordmark-x absolute z-[3] block"
-        style={{ left: `${xBox.left}%`, top: `${xBox.top}%`, width: `${xBox.width}%`, height: `${xBox.height}%` }}
-      >
+      {front}
+
+      <span ref={refs?.x} className="wordmark-x absolute z-[3] block" style={xStyle}>
+        {flash && (
+          <span
+            ref={refs?.shock}
+            className="wordmark-shock pointer-events-none absolute left-1/2 top-1/2 block aspect-square h-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-lime opacity-0"
+          />
+        )}
         {flash && (
           <span
             ref={refs?.flash}
@@ -91,5 +122,7 @@ export const WORD_METRICS = {
   width: WORDMARK.width,
   height: WORDMARK.height,
   xCenter: X_BOX.x + X_BOX.w / 2,
+  /** Centro vertical de la X (para ubicar el anillo de la órbita). */
+  xMiddle: X_BOX.y + X_BOX.h / 2,
   zajuCenter: (ZAJU[0]!.box.x + ZAJU[3]!.box.x + ZAJU[3]!.box.w) / 2,
 };
