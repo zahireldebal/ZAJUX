@@ -5,6 +5,8 @@ import { SkipLink } from './SkipLink';
 import { getDictionary } from '@/i18n';
 import type { LegalKey, Locale, SectionKey } from '@/i18n/config';
 import { projectsVisible } from '@/data/projects';
+import { ContactModal } from '@/components/contact/ContactModal';
+import { FloatingCta } from '@/components/contact/FloatingCta';
 
 /** Secciones que aparecen en el menú (Proyectos solo si el portafolio está activo). */
 export function navSections(): SectionKey[] {
@@ -30,6 +32,8 @@ export function SiteChrome({ locale, legalKey, children }: { locale: Locale; leg
         {children}
       </main>
       <Footer locale={locale} dict={dict} links={links} legalKey={legalKey} />
+      {!legalKey && <FloatingCta locale={locale} label={dict.floating.cta} />}
+      <ContactModal locale={locale} dict={{ contact: dict.contact, services: dict.services, plans: dict.plans }} closeLabel={dict.common.close} />
     </>
   );
 }

@@ -13,6 +13,7 @@ import { Plans } from '@/components/sections/Plans';
 import { About } from '@/components/sections/About';
 import { Projects } from '@/components/sections/Projects';
 import { Faq } from '@/components/sections/Faq';
+import { Contact } from '@/components/sections/Contact';
 import { projectsVisible } from '@/data/projects';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -38,11 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <About locale={locale} t={t} index={6} />
       <Projects locale={locale} t={t} index={7} />
       <Faq locale={locale} t={t.faq} index={7 + p} />
-      <section id={SECTION_IDS[locale].contact} className="section-y" tabIndex={-1}>
-        <div className="container-x">
-          <SectionHeading index={8 + p} eyebrow={t.contact.eyebrow} title={t.contact.title} intro={t.contact.intro} id="contact-title" />
-        </div>
-      </section>
+      <Contact locale={locale} t={t} index={8 + p} />
     </SiteChrome>
   );
 }

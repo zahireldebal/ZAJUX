@@ -106,11 +106,37 @@ export function MotionProvider() {
       });
     });
 
-    html.classList.add('motion-ready');
+    // Si se entró con un enlace a una sección (#planes), volver a ubicarla: el pin del
+    // Proceso agrega altura después de que el navegador ya saltó al ancla.
+    let userScrolled = false;
+    const markUser = () => (userScrolled = true);
+    window.addEventListener('wheel', markUser, { passive: true, once: true });
+    window.addEventListener('touchstart', markUser, { passive: true, once: true });
+    const fixHash = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      const el = id ? document.getElementById(id) : null;
+      if (!el || userScrolled) return;
+      const y = el.getBoundingClientRect().top + window.scrollY - 88;
+      if (lenis) {
+        lenis.resize();
+        lenis.scrollTo(y, { immediate: true, force: true });
+      }
+      else window.scrollTo({ top: y, behavior: 'instant' });
+    };
+
     // Recalcular cuando terminan de cargar las fuentes (cambian alturas)
-    document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
+    const settle = () => {
+      ScrollTrigger.refresh();
+      fixHash();
+    };
+    const raf = requestAnimationFrame(() => requestAnimationFrame(settle));
+    document.fonts?.ready.then(settle).catch(() => {});
+    html.classList.add('motion-ready');
 
     return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('wheel', markUser);
+      window.removeEventListener('touchstart', markUser);
       document.removeEventListener('click', onClick);
       ctx.revert();
       if (lenis) {
