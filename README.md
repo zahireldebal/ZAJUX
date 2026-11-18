@@ -1,7 +1,7 @@
 # ZAJUX · Sitio web
 
 Sitio del estudio ZAJUX (diseño y desarrollo web, Uruguay · Brasil), en español, portugués e inglés.
-Next.js (App Router) con exportación estática, publicado en Cloudflare Pages.
+Next.js (App Router) con exportación estática, publicado en Cloudflare Workers (recursos estáticos).
 
 - **Stack:** Next.js 16, TypeScript, Tailwind CSS 4, GSAP (ScrollTrigger y SplitText), Lenis, React Hook Form + Zod.
 - **Pruebas:** Vitest (lógica) y Playwright (flujos, idiomas y accesibilidad con axe).
@@ -112,7 +112,7 @@ La sección y su link en el menú aparecen solos.
 
 ## Variables de entorno
 
-Copiar `.env.example` a `.env.local` para desarrollo, y cargar las mismas variables en Cloudflare Pages.
+Copiar `.env.example` a `.env.local` para desarrollo (`.env.local` está en `.gitignore` y no se sube). En Cloudflare, las variables van en el Worker: **Settings → Build → Variables and secrets**.
 
 | Variable | Para qué | Si no está |
 |---|---|---|
@@ -121,29 +121,45 @@ Copiar `.env.example` a `.env.local` para desarrollo, y cargar las mismas variab
 
 Las variables `NEXT_PUBLIC_*` se incorporan **en el build**: después de cambiarlas en Cloudflare, hay que volver a desplegar.
 
-## Publicar en Cloudflare Pages
+## Publicar en Cloudflare Workers
 
-1. En Cloudflare: **Workers & Pages → Create → Pages → Connect to Git**, y elegir el repositorio `zahireldebal/ZAJUX`, rama `main`.
+El sitio se publica como **Worker con recursos estáticos**: Cloudflare corre `npm run build` y después `npx wrangler deploy`, que sube la carpeta `out/` según [wrangler.jsonc](wrangler.jsonc).
+
+1. En Cloudflare: **Workers & Pages → Create → Import a repository**, y elegir el repositorio `zahireldebal/ZAJUX`, rama `main`.
 2. Configuración del build:
-   - **Framework preset:** `Next.js (Static HTML Export)`
+   - **Project name:** `zajux` (tiene que coincidir con `"name"` en `wrangler.jsonc`).
    - **Build command:** `npm run build`
-   - **Build output directory:** `out`
-   - **Variables de entorno:** `NODE_VERSION` = `24`, más `NEXT_PUBLIC_WEB3FORMS_KEY` y `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` si las tienen.
-3. **Save and Deploy.** Cada `git push` a `main` vuelve a publicar.
-4. Actualizar `SITE_URL` en `business.ts` con la URL que asigne Cloudflare (`https://<proyecto>.pages.dev`).
+   - **Deploy command:** `npx wrangler deploy`
+3. Variables: en el Worker, **Settings → Build → Variables and secrets**. Cargar `NODE_VERSION` = `24`, `NEXT_PUBLIC_WEB3FORMS_KEY` y, cuando la tengan, `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`.
+4. Cada `git push` a `main` vuelve a publicar en `https://zajux.zahireldebal.workers.dev`.
+
+`wrangler.jsonc` define:
+
+- `assets.directory: "./out"`: la exportación estática.
+- `not_found_handling: "404-page"`: las rutas inexistentes muestran `out/404.html`.
+- `out/_headers` (generado en el build) aplica los headers de seguridad y la CSP por página.
+
+Para probar el deploy sin publicar: `npm run build && npx wrangler deploy --dry-run`.
 
 ### Conectar el dominio zajux.com
 
-1. En el proyecto de Pages: **Custom domains → Set up a custom domain → `zajux.com`**, y repetir con `www.zajux.com`.
+1. En el Worker: **Settings → Domains & Routes → Add → Custom domain → `zajux.com`**, y repetir con `www.zajux.com`.
    - Si el dominio ya está en Cloudflare, los registros DNS se crean solos.
-   - Si no, Cloudflare indica qué registros crear (o cómo cambiar los nameservers).
+   - Si no, primero hay que agregar el dominio a Cloudflare y cambiar los nameservers donde se compró.
 2. Para que `www` redirija al dominio principal: **Rules → Redirect Rules**, de `www.zajux.com/*` a `https://zajux.com/$1` (301).
 3. Cambiar `SITE_URL` a `https://zajux.com` en [src/data/business.ts](src/data/business.ts), hacer commit y push.
 4. Dar de alta el sitio en Google Search Console y enviar `https://zajux.com/sitemap.xml`.
 
-### Analítica
+### Analítica (Cloudflare Web Analytics)
 
-En Cloudflare: **Analytics & Logs → Web Analytics → Add a site**. Copiar el token en `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`.
+El código ya está listo: si existe `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`, cada página carga el script de Cloudflare y la CSP permite `cloudflareinsights.com`. Sin el token no se carga nada.
+
+Cómo conseguir el token:
+
+1. En el panel de Cloudflare, abrir **Web Analytics** y elegir **Add a site**.
+2. En **Set up hostname**, escribir el dominio del sitio (hoy `zajux.zahireldebal.workers.dev`; después, `zajux.com`) y confirmar con **Done**.
+3. En **Manage site**, copiar el fragmento de JavaScript. El token es el valor de `"token"` dentro de `data-cf-beacon='{"token": "…"}'`. Solo hace falta ese valor, no el fragmento entero.
+4. Cargarlo como `NEXT_PUBLIC_CF_ANALYTICS_TOKEN` en **Settings → Build → Variables and secrets** y volver a desplegar (las variables `NEXT_PUBLIC_*` se incorporan en el build).
 
 ## Seguridad
 

@@ -79,8 +79,14 @@ for (const c of cases) {
   });
 }
 
-test('email sin clave de Web3Forms cae a mailto: y borra el borrador', async ({ page }) => {
+test('enviar por email: Web3Forms (o mailto: sin clave) y borra el borrador', async ({ page }) => {
   await setup(page);
+  // No se envía nada real: se simula la respuesta de Web3Forms
+  let posted: Record<string, string> | null = null;
+  await page.route('https://api.web3forms.com/**', async (route) => {
+    posted = route.request().postDataJSON();
+    await route.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' });
+  });
   await gotoReady(page, '/es/#contacto');
   const form = page.locator('section form').last();
   await expect(form).toBeVisible();
@@ -93,7 +99,8 @@ test('email sin clave de Web3Forms cae a mailto: y borra el borrador', async ({ 
   await form.getByRole('button', { name: 'Revisar mensaje' }).click();
 
   await page.getByRole('button', { name: 'Enviar por email' }).click();
-  await expect(page.getByText('Se va a abrir tu programa de email')).toBeVisible();
+  await expect(page.getByText(/Recibimos tu mensaje|Se va a abrir tu programa de email/)).toBeVisible();
+  if (posted) expect((posted as Record<string, string>).replyto).toBe('ana@example.com');
   // El contenido del email (fecha UTC/ISO, idioma y versión de la política) se prueba en src/lib/contact.test.ts
   expect(await page.evaluate(() => localStorage.getItem('zajux:contact-draft'))).toBeNull();
 });

@@ -287,7 +287,7 @@ const pt: Dictionary = {
     items: [
       {
         q: 'Quanto tempo leva para fazer um site?',
-        a: 'Depende do projeto. Um site institucional costuma ficar pronto em 2 a 4 semanas depois que recebemos textos e fotos [CONFIRMAR]; um sistema ou app leva mais tempo. Na proposta você recebe um prazo definido por escrito.',
+        a: 'Um site institucional leva de 1 a 3 semanas depois que recebemos textos e fotos. Sistemas e apps sob medida dependem de cada projeto: informamos o prazo na proposta.',
       },
       {
         q: 'O que eu preciso enviar?',
@@ -311,7 +311,7 @@ const pt: Dictionary = {
       },
       {
         q: 'Como funciona o pagamento?',
-        a: 'Normalmente uma parte é paga no início e o restante na publicação [CONFIRMAR]. As condições e formas de pagamento ficam por escrito em cada proposta.',
+        a: '50% no início e 50% na publicação. Os planos de manutenção são pagos mensalmente.',
       },
     ],
   },

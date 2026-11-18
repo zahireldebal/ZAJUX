@@ -285,7 +285,7 @@ const es = {
     items: [
       {
         q: '¿Cuánto tarda una web?',
-        a: 'Depende del proyecto. Una web de marca suele estar lista en 2 a 4 semanas desde que tenemos los textos y las fotos [CONFIRMAR]; un sistema o una app lleva más. En la propuesta te damos un plazo concreto por escrito.',
+        a: 'Una web de marca lleva entre 1 y 3 semanas desde que tenemos textos y fotos. Los sistemas y apps a medida dependen de cada proyecto: te pasamos el plazo en la propuesta.',
       },
       {
         q: '¿Qué necesito darles?',
@@ -309,7 +309,7 @@ const es = {
       },
       {
         q: '¿Cómo es el pago?',
-        a: 'Normalmente se paga una parte al empezar y el resto al publicar [CONFIRMAR]. Las condiciones exactas y los medios de pago quedan por escrito en cada propuesta.',
+        a: '50 % al empezar y 50 % al publicar. Los planes de mantenimiento se pagan por mes.',
       },
     ],
   },

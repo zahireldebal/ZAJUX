@@ -287,7 +287,7 @@ const en: Dictionary = {
     items: [
       {
         q: 'How long does a website take?',
-        a: 'It depends on the project. A brand website is usually ready in 2 to 4 weeks once we have the copy and photos [CONFIRMAR]; a system or app takes longer. Your proposal includes a specific timeline in writing.',
+        a: 'A brand website takes 1 to 3 weeks once we have the copy and photos. Custom systems and apps depend on each project: we include the timeline in the proposal.',
       },
       {
         q: 'What do I need to provide?',
@@ -311,7 +311,7 @@ const en: Dictionary = {
       },
       {
         q: 'How does payment work?',
-        a: 'Usually part is paid upfront and the rest at launch [CONFIRMAR]. Exact terms and payment methods are set out in writing in each proposal.',
+        a: '50% upfront and 50% at launch. Maintenance plans are billed monthly.',
       },
     ],
   },

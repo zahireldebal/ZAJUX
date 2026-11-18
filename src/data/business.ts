@@ -3,15 +3,16 @@
  * Los números de WhatsApp van en formato internacional, solo dígitos (wa.me).
  */
 
-/** URL pública del sitio, sin barra final. Cambiar a https://zajux.com al conectar el dominio. */
-export const SITE_URL = 'https://zajux.pages.dev'; // [CONFIRMAR] nombre real del proyecto en Cloudflare Pages
+/** URL pública del sitio (Cloudflare Workers), sin barra final. Cambiar a https://zajux.com al conectar el dominio. */
+export const SITE_URL = 'https://zajux.zahireldebal.workers.dev';
 
 export const BUSINESS = {
   name: 'ZAJUX',
   legalName: 'ZAJUX — Juani Hermelo y Zahir El Debal',
-  /** Email de contacto y de privacidad. Reemplazar el placeholder. */
-  email: '[EMAIL_CONTACTO]',
-  instagram: 'https://www.instagram.com/zajux.web',
+  /** Email de contacto y de privacidad. */
+  email: 'xzajux@gmail.com',
+  instagram: 'https://www.instagram.com/_zajux_/',
+  instagramHandle: '@_zajux_',
   foundingYear: 2026,
 } as const;
 
@@ -25,7 +26,7 @@ export const PEOPLE = {
     city: 'Maldonado',
     countryCode: 'UY',
     whatsapp: '59892754708',
-    languages: ['es', 'pt', 'en'],
+    languages: ['es', 'en'],
   },
   zahir: {
     id: 'zahir',
@@ -34,7 +35,7 @@ export const PEOPLE = {
     city: 'Manaus',
     countryCode: 'BR',
     whatsapp: '5592984823591',
-    languages: ['pt', 'es', 'en'],
+    languages: ['es', 'pt', 'en'],
   },
 } as const satisfies Record<
   PersonId,
@@ -50,10 +51,10 @@ export const PEOPLE = {
 >;
 
 /** Versión vigente de la Política de Privacidad (se registra en cada envío de email). */
-export const PRIVACY_POLICY = { version: '1.0', date: '2026-11-17' } as const;
+export const PRIVACY_POLICY = { version: '1.1', date: '2026-11-18' } as const;
 
 /** Fecha de última actualización de los textos legales. */
-export const LEGAL_UPDATED = '2026-11-17';
+export const LEGAL_UPDATED = '2026-11-18';
 
 /** Indica si el email de contacto ya fue configurado. */
 export const hasContactEmail = () => !BUSINESS.email.startsWith('[');

@@ -45,7 +45,7 @@ export function organizationJsonLd(locale: Locale) {
         '@type': 'ContactPoint',
         contactType: 'sales',
         areaServed: 'BR',
-        availableLanguage: ['pt-BR', 'es', 'en'],
+        availableLanguage: ['es', 'pt-BR', 'en'],
         url: whatsappUrl(PEOPLE.zahir.whatsapp),
       },
     ],

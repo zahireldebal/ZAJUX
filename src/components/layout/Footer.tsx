@@ -68,7 +68,7 @@ export function Footer({
               )}
               <li>
                 <a href={BUSINESS.instagram} className={linkCls} rel="noopener noreferrer" target="_blank">
-                  Instagram · @zajux.web
+                  Instagram · {BUSINESS.instagramHandle}
                 </a>
               </li>
             </ul>
