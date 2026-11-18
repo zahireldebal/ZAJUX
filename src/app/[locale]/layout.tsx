@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import '../globals.css';
-import { grotesk, mono } from '../fonts';
+import { inter } from '../fonts';
 import { HREFLANG, LOCALES, isLocale } from '@/i18n/config';
 import { buildMetadata } from '@/lib/seo';
 import { getDictionary } from '@/i18n';
@@ -26,22 +26,24 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return buildMetadata(locale);
 }
 
-export const viewport: Viewport = { themeColor: '#0F1115', colorScheme: 'dark' };
+export const viewport: Viewport = { themeColor: '#000000', colorScheme: 'dark' };
 
 /**
  * Corre antes de la primera pintura:
  * - "js": hay JavaScript.
- * - "js-motion": se permiten animaciones (sin prefers-reduced-motion).
+ * - "js-motion": hay animaciones. Corren también con "reducir movimiento" activado (por
+ *   ejemplo, Windows con los efectos de animación apagados): son cortas y suaves, y en ese
+ *   caso solo se desactiva el scroll suave (ver MotionProvider).
  * - "intro-pending": la intro del logo todavía no se vio en esta sesión.
  * Red de seguridad: si las animaciones no arrancan en 3,5 s, se muestra todo sin animar.
  */
-const INIT = `(function(){var d=document.documentElement;d.classList.add('js');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('js-motion');var s=null;try{s=sessionStorage.getItem('zajux:intro')}catch(e){}if(!s)d.classList.add('intro-pending');setTimeout(function(){if(!d.classList.contains('motion-ready'))d.classList.remove('js-motion','intro-pending')},3500)}}catch(e){}})();`;
+const INIT = `(function(){var d=document.documentElement;d.classList.add('js');try{d.classList.add('js-motion');var s=null;try{s=sessionStorage.getItem('zajux:intro')}catch(e){}if(!s)d.classList.add('intro-pending');setTimeout(function(){if(!d.classList.contains('motion-ready'))d.classList.remove('js-motion','intro-pending')},3500)}catch(e){}})();`;
 
 export default async function LocaleLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   return (
-    <html lang={HREFLANG[locale]} className={`${grotesk.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang={HREFLANG[locale]} className={inter.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: INIT }} />
       </head>

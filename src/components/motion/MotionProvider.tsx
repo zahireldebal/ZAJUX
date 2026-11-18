@@ -21,13 +21,15 @@ import { setLenis } from "@/lib/lenisStore";
  * líneas recién cuando está por entrar (y se restaura al terminar), así el arranque
  * no fuerza cálculos de layout de toda la página.
  *
- * Si no corre (sin JS o reduced-motion), el contenido se ve normal: el CSS solo oculta
- * esos elementos cuando <html> tiene la clase "js-motion".
+ * Las animaciones corren aunque el sistema pida "reducir movimiento" (por ejemplo, Windows
+ * con los efectos apagados); en ese caso solo se omite el scroll suave.
+ * Si no hay JS, el contenido se ve normal: el CSS solo oculta esos elementos cuando
+ * <html> tiene la clase "js-motion".
  */
 export function MotionProvider() {
   useEffect(() => {
     const html = document.documentElement;
-    if (prefersReducedMotion() || !html.classList.contains("js-motion")) return;
+    if (!html.classList.contains("js-motion")) return;
 
     // El JavaScript arrancó: la red de seguridad del <head> ya no hace falta.
     html.classList.add("motion-ready");
@@ -59,10 +61,10 @@ function setup(
 ): () => void {
   let lenis: Lenis | null = null;
 
-  // ---------- Scroll suave ----------
-  const finePointer = window.matchMedia(
-    "(hover: hover) and (pointer: fine)",
-  ).matches;
+  // ---------- Scroll suave (solo mouse/trackpad y sin "reducir movimiento") ----------
+  const finePointer =
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !prefersReducedMotion();
   const tick = (time: number) => lenis?.raf(time * 1000);
   if (finePointer) {
     lenis = new LenisCtor({

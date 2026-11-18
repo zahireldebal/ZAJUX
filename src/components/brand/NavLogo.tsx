@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Isotype } from "./Isotype";
 import { Wordmark } from "./Wordmark";
-import { loadGsap, prefersReducedMotion } from "@/components/motion/gsap";
+import { loadGsap } from "@/components/motion/gsap";
 import {
   createOrbitRenderer,
   measureGeometry,
@@ -20,7 +20,7 @@ export function NavLogo({ href, label }: { href: string; label: string }) {
   const running = useRef(false);
 
   const play = async () => {
-    if (running.current || prefersReducedMotion()) return;
+    if (running.current) return;
     if (!root.current || !x.current || !xSharp.current || !xBlur.current)
       return;
     running.current = true;
