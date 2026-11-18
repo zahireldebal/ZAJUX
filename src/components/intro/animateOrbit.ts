@@ -23,20 +23,15 @@ export function measureGeometry(root: HTMLElement, compact = false): OrbitGeomet
  * y z-index (este último únicamente en los extremos laterales, fuera de las letras).
  */
 export function createOrbitRenderer(gsap: typeof GsapType, t: OrbitTargets) {
-  const setX = gsap.quickSetter(t.x, 'x', 'px');
-  const setY = gsap.quickSetter(t.x, 'y', 'px');
-  const setScale = gsap.quickSetter(t.x, 'scale');
-  const setOpacity = gsap.quickSetter(t.x, 'opacity');
+  // quickSetter("css") acepta varias propiedades a la vez (el alias "scale" suelto no funciona)
+  const setX = gsap.quickSetter(t.x, 'css') as (v: Record<string, number>) => void;
   const setSharp = gsap.quickSetter(t.xSharp, 'opacity');
   const setBlur = gsap.quickSetter(t.xBlur, 'opacity');
   let front: boolean | null = null;
 
-  return (theta: number, geom: OrbitGeometry, settle: number) => {
-    const f = orbitFrame(theta, geom, settle);
-    setX(f.x);
-    setY(f.y);
-    setScale(f.scale);
-    setOpacity(f.opacity);
+  return (theta: number, geom: OrbitGeometry, settle: number, restScale = 1) => {
+    const f = orbitFrame(theta, geom, settle, restScale);
+    setX({ x: f.x, y: f.y, scaleX: f.scale, scaleY: f.scale, opacity: f.opacity });
     setBlur(f.blur);
     setSharp(1 - f.blur * 0.85);
     if (f.front !== front) {

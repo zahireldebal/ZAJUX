@@ -3,6 +3,7 @@ import { SECTION_IDS, SECTION_KEYS, isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n';
 import { SiteChrome } from '@/components/layout/SiteChrome';
 import { SectionObserver } from '@/components/layout/SectionObserver';
+import { Hero } from '@/components/sections/Hero';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -11,11 +12,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <SiteChrome locale={locale}>
       <SectionObserver locale={locale} />
-      <section className="container-x flex min-h-dvh flex-col justify-center pt-24">
-        <p className="label-mono text-lime">{t.hero.eyebrow}</p>
-        <h1 className="mt-6 max-w-4xl text-display font-semibold">{t.hero.title}</h1>
-        <p className="mt-6 max-w-2xl text-lead text-mute">{t.hero.subtitle}</p>
-      </section>
+      <Hero locale={locale} t={t} />
       {SECTION_KEYS.filter((k) => k !== 'projects').map((k, i) => (
         <section key={k} id={SECTION_IDS[locale][k]} className="container-x section-y border-t border-line">
           <p className="label-mono text-mute">

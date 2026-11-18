@@ -327,3 +327,130 @@ html.lenis body {
 .lenis.lenis-stopped {
   overflow: clip;
 }
+
+/* ------------------------------------------------------------------ */
+/* Intro del logo + revelado del hero                                 */
+/* Todo depende de clases que pone el script de <head>:               */
+/*   js-motion      → hay JS y no hay reduced-motion                  */
+/*   intro-pending  → la intro todavía no se vio en esta sesión       */
+/*   intro-running  → GSAP tomó el control de la X                    */
+/*   intro-skip     → la persona salteó la intro                      */
+/* ------------------------------------------------------------------ */
+:root {
+  --hero-base: 0ms;
+}
+html.intro-pending {
+  --hero-base: 700ms;
+}
+
+/* 1. ZAJU: revelado suave por letra (CSS, arranca en la primera pintura) */
+html.intro-pending .hero-logo .wordmark-letters path {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: zajux-letter-in 0.95s var(--ease-out-expo) both;
+}
+html.intro-pending .hero-logo .wordmark-letters path:nth-child(1) { animation-delay: 60ms; }
+html.intro-pending .hero-logo .wordmark-letters path:nth-child(2) { animation-delay: 130ms; }
+html.intro-pending .hero-logo .wordmark-letters path:nth-child(3) { animation-delay: 200ms; }
+html.intro-pending .hero-logo .wordmark-letters path:nth-child(4) { animation-delay: 270ms; }
+
+@keyframes zajux-letter-in {
+  from {
+    opacity: 0;
+    transform: translateY(38%) scale(0.96);
+  }
+}
+
+/* 2. La X espera a GSAP. Si el JS no llega, aparece igual a los 2,6 s. */
+html.intro-pending:not(.intro-running) .hero-logo .wordmark-x {
+  opacity: 0;
+  animation: zajux-fade-in 0.5s ease-out 2.6s forwards;
+}
+@keyframes zajux-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+/* 3. Hero: palabras del título que suben desde una máscara + resto que entra */
+.hero-word-mask {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.12em;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+  vertical-align: top;
+}
+.hero-word {
+  display: inline-block;
+}
+html.js-motion .hero-word {
+  animation: zajux-word-up 1.05s var(--ease-out-expo) both;
+  animation-delay: calc(var(--hero-base) + var(--i, 0) * 55ms);
+}
+html.js-motion .hero-rise {
+  animation: zajux-rise 1s var(--ease-out-expo) both;
+  animation-delay: calc(var(--hero-base) + var(--d, 0ms));
+}
+@keyframes zajux-word-up {
+  from {
+    transform: translateY(105%);
+  }
+}
+@keyframes zajux-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* Saltear: todo a su estado final */
+html.intro-skip .hero-logo .wordmark-letters path,
+html.intro-skip .hero-word,
+html.intro-skip .hero-rise {
+  animation: none !important;
+}
+
+/* Fondo del hero: anillos de órbita que se dibujan y un brillo que respira */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, rgb(245 244 240 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(245 244 240 / 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  background-position: center top;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 42%, #000 20%, transparent 75%);
+}
+.hero-glow {
+  background: radial-gradient(closest-side, rgb(198 244 50 / 0.12), transparent);
+}
+html.js-motion .hero-glow {
+  animation: zajux-breathe 9s ease-in-out infinite alternate;
+}
+@keyframes zajux-breathe {
+  from {
+    transform: translate3d(-4%, 2%, 0) scale(0.92);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+    opacity: 1;
+  }
+}
+html.js-motion .hero-ring {
+  animation: zajux-ring 2.2s var(--ease-out-expo) both;
+  animation-delay: calc(var(--hero-base) + var(--d, 0ms));
+}
+@keyframes zajux-ring {
+  from {
+    opacity: 0;
+    transform: scale(0.86) rotate(-6deg);
+  }
+}
+html.js-motion .hero-ring-spin {
+  animation: zajux-spin 60s linear infinite;
+}
+@keyframes zajux-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

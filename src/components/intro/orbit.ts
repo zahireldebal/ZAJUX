@@ -49,7 +49,7 @@ export function geometryFor(
     cx: zajuCenter - xCenter,
     cy: 0,
     rx: wordWidth * (compact ? 0.52 : 0.64),
-    ry: wordHeight * (compact ? 0.58 : 0.86),
+    ry: wordHeight * (compact ? 0.42 : 0.5),
     tilt: compact ? -0.08 : -0.14,
   };
 }
@@ -79,7 +79,7 @@ export function orbitPoint(theta: number, g: OrbitGeometry) {
  * @param theta ángulo actual
  * @param settle 0 = en la órbita, 1 = encajada en su lugar (mezcla en espiral)
  */
-export function orbitFrame(theta: number, g: OrbitGeometry, settle: number): OrbitFrame {
+export function orbitFrame(theta: number, g: OrbitGeometry, settle: number, restScale = 1): OrbitFrame {
   const p = orbitPoint(theta, g);
   const k = (p.depth + 1) / 2; // 0 detrás → 1 delante
   const orbitScale = lerp(SCALE_BACK, SCALE_FRONT, k);
@@ -88,7 +88,7 @@ export function orbitFrame(theta: number, g: OrbitGeometry, settle: number): Orb
   return {
     x: lerp(p.x, 0, settle),
     y: lerp(p.y, 0, settle),
-    scale: lerp(orbitScale, 1, settle),
+    scale: lerp(orbitScale, restScale, settle),
     opacity: lerp(orbitOpacity, 1, settle),
     blur: lerp(orbitBlur, 0, settle),
     front: settle > 0.5 || p.depth >= 0,
